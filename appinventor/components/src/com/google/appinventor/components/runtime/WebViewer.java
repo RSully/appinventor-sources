@@ -6,11 +6,17 @@
 
 package com.google.appinventor.components.runtime;
 
+import kawa.standard.Scheme;
+import gnu.expr.Language;
+import android.os.Handler;
+import android.os.Looper;
+
 import android.content.Context;
 import android.webkit.JavascriptInterface;
 import com.google.appinventor.components.annotations.DesignerComponent;
 import com.google.appinventor.components.annotations.DesignerProperty;
 import com.google.appinventor.components.annotations.PropertyCategory;
+import com.google.appinventor.components.annotations.SimpleEvent;
 import com.google.appinventor.components.annotations.SimpleFunction;
 import com.google.appinventor.components.annotations.SimpleObject;
 import com.google.appinventor.components.annotations.SimpleProperty;
@@ -440,6 +446,15 @@ public final class WebViewer extends AndroidViewComponent {
     webview.clearCache(true);
   }
 
+
+  /**
+   * Simple event to be raised after a JavaScript event.
+   */
+  @SimpleEvent(description = "Simple event to be raised after an event fires in the JavaScript environment.")
+  public void ScriptCallback(final String eventName) {
+    EventDispatcher.dispatchEvent(this, "ScriptCallback", eventName);
+  }
+
   /**
    * Allows the setting of properties to be monitored from the javascript
    * in the WebView
@@ -447,11 +462,13 @@ public final class WebViewer extends AndroidViewComponent {
   public class WebViewInterface {
     Context mContext;
     String webViewString;
-
+	Language scheme;
     /** Instantiate the interface and set the context */
     WebViewInterface(Context c) {
       mContext = c;
       webViewString = " ";
+      scheme = Scheme.getInstance("scheme");
+      scheme.eval("(require com.google.youngandroid.runtime)");
     }
 
     /**
@@ -464,9 +481,42 @@ public final class WebViewer extends AndroidViewComponent {
       return webViewString;
     }
 
+	@JavascriptInterface
+	public void dispatchEvent(String eventName) {
+	  ScriptCallback(eventName);
+	}
+	
+	@JavascriptInterface
+	public String getEval(String input) {
+		try {
+    		return scheme.eval(input).toString();
+    	} catch (Exception e) {
+    		return "ERROR: "+e.getMessage();
+		} catch (Throwable throwable) {
+    		return "nope2";
+    	}
+	}
+	
+	@JavascriptInterface
+	public void sendEval(String input) {
+		final String pass = input;
+		new Handler(Looper.getMainLooper()).post(new Runnable() {
+    		@Override
+    		public void run() {
+				try {
+    				Scheme.getInstance("scheme").eval(pass);
+    			} catch (Exception e) {
+    				webViewString = "ERROR: "+e.getMessage();
+				} catch (Throwable throwable) {
+    			}
+		    }
+		});
+	}
+
     /**
      * Sets the web view string
      */
+    @JavascriptInterface
     public void setWebViewString(String newString) {
       webViewString = newString;
     }

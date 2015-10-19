@@ -362,7 +362,7 @@ public final class Compiler {
       // the specified SDK version.  We right now support building for minSDK 4,
       // and minSDK 3 as compatibility mode (through a property in Screen 1).
       // We might also want to allow users to specify minSdk version or targetSDK version.
-      out.write("  <uses-sdk android:minSdkVersion=\"" + minSDK + "\" />\n");
+      out.write("  <uses-sdk android:minSdkVersion=\"19\" android:targetSdkVersion=\"19\" />\n");
 
       out.write("  <application ");
 

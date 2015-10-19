@@ -3790,6 +3790,11 @@ public interface OdeMessages extends Messages {
   String textToTranslateParams();
 
   //Events
+  
+  @DefaultMessage("ScriptCallback")
+  @Description("")
+  String ScriptCallbackEvents();
+  
   @DefaultMessage("AccelerationChanged")
   @Description("")
   String AccelerationChangedEvents();
