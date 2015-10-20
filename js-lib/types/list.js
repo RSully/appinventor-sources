@@ -1,3 +1,3 @@
 function AIList() {
-  return '(*list-for-runtime* )'
+    return '(*list-for-runtime* ' + argStr + ')'
 }
