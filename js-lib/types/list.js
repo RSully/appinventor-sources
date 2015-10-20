@@ -1,13 +1,20 @@
 function AIList() {
-    var args = [];
+    this.args = [];
     for (var k in arguments) {
         var v = arguments[k];
 
         if (typeof v == 'string') {
-            args.push("'" + v + "'")
+            this.args.push('"' + v + '"');
         } else if (typeof v == 'number') {
-            args.push(v)
+            this.args.push(v);
+        } else if (typeof v == 'object') {
+            this.args.push(v.toString());
         }
     }
-    return '(*list-for-runtime* ' + args.join(' ') + ')'
 }
+
+AIList.prototype.toString = function() {
+    return '(*list-for-runtime* ' + this.args.join(' ') + ')';
+}
+
+console.log(new AIList(1,2,"ha", new AIList(1,2,3)).toString());
