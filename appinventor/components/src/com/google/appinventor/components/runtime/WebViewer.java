@@ -468,7 +468,7 @@ public final class WebViewer extends AndroidViewComponent {
       mContext = c;
       webViewString = " ";
       scheme = Scheme.getInstance("scheme");
-      scheme.eval("(require com.google.youngandroid.runtime)");
+      //scheme.eval("(require com.google.youngandroid.runtime)");
     }
 
     /**
