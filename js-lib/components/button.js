@@ -1,5 +1,5 @@
 var Button = function() {
-  var name = 'Button'+(Object.keys(Button.instances).length+1);
+  var name = 'Button'+(Object.keys(Button.instances).length+(new Date()).getSeconds());
   AppInventor.sendEval("(add-component Screen1 Button "+name+")");
   AppInventor.sendEval("(set-and-coerce-property! '"+name+" 'Text \"New Button\" 'text)");
   //if (AppInventor.getEval(name).indexOf('@') != -1) success!
@@ -31,7 +31,7 @@ Button.prototype.init_props = function(props) {
 Button.prototype.init_events = function(events) {
 	var user = this;
 	events.forEach(function(event) {
-    	AppInventor.sendEval('(define-event (lookup-in-current-form-environment \''+user.name+') '+event+'()(set-this-form)\
+    	AppInventor.sendEval('(define-event '+user.name+' '+event+'()(set-this-form)\
     	((WebViewer1:getView):evaluateJavascript "_.dispatch.emit(\''+event+'\', \''+user.name+'\')" #!null))');
     });
 };
