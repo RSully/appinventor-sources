@@ -4,6 +4,7 @@ function AIList() {
         var v = arguments[k];
 
         if (typeof v == 'string') {
+            // TODO: this should use AIText for escaping
             this.args.push('"' + v + '"');
         } else if (typeof v == 'number') {
             this.args.push(v);
