@@ -1,9 +1,15 @@
-function AIBool(b) {
-    if (Boolean(b) && b != "false") {
-      this.value = "#t";
-    } else { this.value = "#f"; }
+function AIBool(value) {
+	if (typeof value === "boolean") {
+		this.value = value;
+	} else if (typeof value === "string") {
+		if (value.substr(0, 1) === "#") {
+			this.value = value.substr(1, 1) === "t";
+		} else {
+			this.value = value === "true"
+		}
+	}
 }
 
 AIBool.prototype.toString = function() {
-    return this.value;
+    return this.value ? "#t" : "#f";
 };
