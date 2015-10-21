@@ -18,5 +18,5 @@ function NativeToAI(v) {
     }
 
     // whoops? shouldn't get here!
-    return null;
+    return v;
 }
