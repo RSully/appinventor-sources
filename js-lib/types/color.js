@@ -4,5 +4,5 @@ function AIColor(r, g, b, a) {
 }
 
 AIColor.prototype.toString = function() {
-    return '(make-color ' + new AIList(this.r, this.b, this.g, this.a) + ')';
+    return AIFunction('make-color', new AIList(this.components));
 };
