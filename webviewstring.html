@@ -1,0 +1,32 @@
+<!doctype html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+  <script src="/js-lib/underscore.js"></script>
+  <script src="/js-lib/eventful.js"></script>
+  <script src="/js-lib/components/button.js"></script>
+  <!-- <script src="/js-lib/app.js"></script> -->
+  <script type="text/javascript">
+  window.alert = function(s) { AppInventor.getEval('((android.widget.Toast:makeText Screen1 "'+s+'" 1):show)'); };
+  $(window).ready(function() {
+    AppInventor.sendEval("(clear-current-form)");
+    AppInventor.getEval("(require com.google.youngandroid.runtime)");
+    AppInventor.sendEval("(require com.google.youngandroid.runtime)");
+    AppInventor.getEval("(require <com.google.youngandroid.runtime>)");
+    AppInventor.sendEval("(require <com.google.youngandroid.runtime>)");
+    AppInventor.sendEval("(Screen1:setTitle)");
+    AppInventor.sendEval("(set-and-coerce-property! 'Screen1 'Scrollable #t 'boolean)");
+    AppInventor.sendEval('(((WebViewer1:getView):getClass):setWebContentsDebuggingEnabled #t)');
+    var button1 = new Button();
+    button1.Text = "'hello";
+    alert('fuck yesss');
+  });
+  </script>
+  <title>Morp</title>
+</head>
+
+<body>
+<h1>herro</h1>
+</body>
+</html>

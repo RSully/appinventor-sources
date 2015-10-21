@@ -1,5 +1,5 @@
 var Button = function() {
-  var name = 'Button'+(Button.instances.length+1);
+  var name = 'Button'+(Object.keys(Button.instances).length+1);
   AppInventor.sendEval("(add-component Screen1 Button "+name+")");
   AppInventor.sendEval("(set-and-coerce-property! '"+name+" 'Text \"New Button\" 'text)");
   //if (AppInventor.getEval(name).indexOf('@') != -1) success!

@@ -7,22 +7,6 @@ var button1 = new Button();
 - Notifier
 - Screen
 
-// Button X
-Properties = ["BackgroundColor","Enabled","FontBold","FontItalic","FontSize","FontTypeface","Height","Image","Shape","ShowFeedback","Text","TextAlignment","TextColor","Visible","Width"]
-Events = ["Click()","GotFocus()","LongClick()","LostFocus()","TouchDown()","TouchUp()"]
-
-//  CheckBox 
-Properties  = ["BackgroundColor","Checked","Enabled","Height","Width","Text","TextColor","Visible"]
-Events  = ["Click()","GotFocus()","LostFocus()"]
-
-// DatePicker
-Properties = ["BackgroundColor","Day","Enabled","FontBold","FontItalic","FontSize","FontTypeface","Height","Image","Instant","Month","MonthInText","Shape","ShowFeedback","Text","TextAlignment","TextColor","Visible","Width","Year"]
-Events = ["AfterDateSet()","GotFocus()","LostFocus()","TouchDown()","TouchUp()"]
-Methods = ["LaunchPicker()","SetDateToDisplay(number year, number month, number day)","SetDateToDisplayFromInstant(InstantInTime instant)"]
-
-// Image
-Properties = ["Animation","Height","Picture","Visible","Width"]
-
 //  Label 
 Properties  = ["BackgroundColor","FontBold","FontItalic","FontSize","FontTypeface","HasMargins","Height","Width","Text","TextAlignment","TextColor","Visible"]
 
@@ -30,10 +14,6 @@ Properties  = ["BackgroundColor","FontBold","FontItalic","FontSize","FontTypefac
 Properties = ["BackgroundColor","Elements","ElementsFromString","Enabled","FontBold","FontItalic","FontSize","FontTypeface","Height","Image","Selection","SelectionIndex","Shape","ShowFeedback","ShowFilterBar","Text","TextAlignment","TextColor","Title","Visible","Width","ItemTextColor","ItemBackgroundColor"]
 Events = ["AfterPicking()","BeforePicking()","GotFocus()","LostFocus()"]
 Methods = ["Open()"]
-
-// ListView
-Properties = ["BackgroundColor","Elements","ElementsFromString","Height","Selection","SelectionIndex","ShowFilterBar","TextColor","Visible","Width"]
-Events = ["AfterPicking()"]
 
 // Notifier
 Properties = ["BackgroundColor","NotifierLength","TextColor"]
