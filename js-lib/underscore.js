@@ -15,7 +15,7 @@ _.extend = function(obj) {
 };
 
 window.alert = (function(s) {
-  AppInventor.getEval('((android.widget.Toast:makeText Screen1 "'+s+'" 1):show)');
+  AppInventor.getEval('((android.widget.Toast:makeText Screen1 "'+s+'" 0):show)');
 });
 
 AppInventor.uiEval = (function(val, callback) {

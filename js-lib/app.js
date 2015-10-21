@@ -2,12 +2,24 @@ window.alert = function(s) { AppInventor.getEval('((android.widget.Toast:makeTex
 
 var button1 = new Button();
 
+
+
+AppInventor.getEval((function(){/*
+
+(set! *ui-handler* )
+(*ui-handler*:post
+   (runnable (lambda ()
+    Screen1:Title
+)))
+
+*/}).toString().slice(14,-3))
+
 /*NEEDED
 - Button (done)
 - Notifier
 - Screen
 
-//  Label 
+//  Label
 Properties  = ["BackgroundColor","FontBold","FontItalic","FontSize","FontTypeface","HasMargins","Height","Width","Text","TextAlignment","TextColor","Visible"]
 
 // ListPicker
@@ -20,7 +32,7 @@ Properties = ["BackgroundColor","NotifierLength","TextColor"]
 Events = ["AfterChoosing(text choice)","AfterTextInput(text response)"]
 Methods = ["DismissProgressDialog()","LogError(text message)","LogInfo(text message)","LogWarning(text message)","ShowAlert(text notice)","ShowChooseDialog(text message, text title, text button1Text, text button2Text, boolean cancelable)","ShowMessageDialog(text message, text title, text buttonText)","ShowProgressDialog(text message, text title)","ShowTextDialog(text message, text title, boolean cancelable)"]
 
-//  PasswordTextBox 
+//  PasswordTextBox
 Methods = ["RequestFocus()"]
 Properties  = ["BackgroundColor","Enabled","FontBold","FontItalic","FontSize","FontTypeface","Height","Width","TextAlignment","TextColor","Hint"]
 Events  = ["GotFocus()","LostFocus()"]
@@ -38,7 +50,7 @@ Properties = ["Elements","ElementsFromString","Height","Prompt","Selection","Sel
 Events = ["AfterSelecting(text selection)"]
 Methods = ["DisplayDropdown()"]
 
-//  TextBox 
+//  TextBox
 Methods  = ["HideKeyboard()","RequestFocus()"]
 Properties  = ["BackgroundColor","Enabled","FontBold","FontItalic","FontSize","FontTypeface","Height","Hint","MultiLine","NumbersOnly","Text","TextAlignment","TextColor","Visible","Width"]
 Events  = ["GotFocus()","LostFocus()"]

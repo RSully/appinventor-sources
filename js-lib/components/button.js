@@ -31,7 +31,7 @@ Button.prototype.init_props = function(props) {
 Button.prototype.init_events = function(events) {
 	var user = this;
 	events.forEach(function(event) {
-    	AppInventor.sendEval('(define-event '+user.name+' '+event+'()(set-this-form)\
+    	AppInventor.sendEval('(define-event (lookup-in-current-form-environment \''+user.name+') '+event+'()(set-this-form)\
     	((WebViewer1:getView):evaluateJavascript "_.dispatch.emit(\''+event+'\', \''+user.name+'\')" #!null))');
     });
 };
