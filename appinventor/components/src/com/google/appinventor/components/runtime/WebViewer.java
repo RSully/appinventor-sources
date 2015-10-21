@@ -462,13 +462,14 @@ public final class WebViewer extends AndroidViewComponent {
   public class WebViewInterface {
     Context mContext;
     String webViewString;
-	Language scheme;
+    String uiReturn;
+    Language scheme;
     /** Instantiate the interface and set the context */
     WebViewInterface(Context c) {
       mContext = c;
+      uiReturn = "";
       webViewString = " ";
       scheme = Scheme.getInstance("scheme");
-      //scheme.eval("(require com.google.youngandroid.runtime)");
     }
 
     /**
@@ -476,10 +477,15 @@ public final class WebViewer extends AndroidViewComponent {
      *
      * @return string
      */
-    @JavascriptInterface
-    public String getWebViewString() {
-      return webViewString;
-    }
+    	@JavascriptInterface
+    	public String getWebViewString() {
+    	    return webViewString;
+    	}
+
+    	@JavascriptInterface
+    	public String getUIReturn() {
+    	    return uiReturn;
+    	}
 
 	@JavascriptInterface
 	public void dispatchEvent(String eventName) {
@@ -488,39 +494,34 @@ public final class WebViewer extends AndroidViewComponent {
 	
 	@JavascriptInterface
 	public String getEval(String input) {
-		try {
+	    try {
     		return scheme.eval(input).toString();
-    	} catch (Exception e) {
+    	    } catch (Exception e) {
     		return "ERROR: "+e.getMessage();
-		} catch (Throwable throwable) {
+	    } catch (Throwable throwable) {
     		return "nope2";
-    	}
+    	    }
 	}
 	
 	@JavascriptInterface
 	public void sendEval(String input) {
-		final String pass = input;
-		new Handler(Looper.getMainLooper()).post(new Runnable() {
+	     final String pass = input;
+	     new Handler(Looper.getMainLooper()).post(new Runnable() {
     		@Override
     		public void run() {
-				try {
-    				Scheme.getInstance("scheme").eval(pass);
-    			} catch (Exception e) {
-    				webViewString = "ERROR: "+e.getMessage();
-				} catch (Throwable throwable) {
-    			}
-		    }
-		});
+		     try {
+    			uiReturn = Scheme.getInstance("scheme").eval(pass).toString();
+    		     } catch (Exception e) {
+    			uiReturn = "ERROR: "+e.getMessage();
+		     } catch (Throwable throwable) {}
+		}
+	    });
 	}
 
-    /**
-     * Sets the web view string
-     */
-    @JavascriptInterface
-    public void setWebViewString(String newString) {
-      webViewString = newString;
-    }
-
+        @JavascriptInterface
+        public void setWebViewString(String newString) {
+            webViewString = newString;
+        }
   }
 }
 
