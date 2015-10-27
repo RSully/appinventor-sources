@@ -10,25 +10,9 @@
   <script src="/js-lib/types/bool.js"></script>
   <script src="/js-lib/components/button.js"></script>
   <script src="/js-lib/components/screen.js"></script>
-  <!-- <script src="/js-lib/app.js"></script> -->
-  <script type="text/javascript">
-    //AppInventor.sendEval('(reset-current-form-environment)');//("(clear-current-form)");
-    AppInventor.getEval("(require <com.google.youngandroid.runtime>)");
-    AppInventor.sendEval("(require <com.google.youngandroid.runtime>)");
-    AppInventor.sendEval('(((WebViewer1:getView):getParent):removeView (WebViewer1:getView))');
-    AppInventor.sendEval('((as com.google.appinventor.components.runtime.ComponentContainer\
-       (lookup-in-current-form-environment \'Screen1)):$add\
-        (as com.google.appinventor.components.runtime.AndroidViewComponent WebViewer1))');
-    AppInventor.sendEval('(((WebViewer1:getView):getClass):setWebContentsDebuggingEnabled #t)');
-    var screen1 = new AIScreen();
-    screen1.Title = document.title;
-    screen1.ShowStatusBar = new AIBool(0);
-    var button1 = new Button();
-    button1.Text = new AIText('awesome');
-    button1.on('Click', function() {
-      alert('dude!!');
-    });
-  </script>
+  
+  <script src="/js-lib/init.js"></script>
+  <script src="/js-lib/app.js"></script>
 </head>
 
 <body>
