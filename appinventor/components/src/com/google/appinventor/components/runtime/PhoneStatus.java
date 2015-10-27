@@ -6,6 +6,11 @@
 
 package com.google.appinventor.components.runtime;
 
+import kawa.standard.Scheme;
+import gnu.expr.Language;
+import android.os.Handler;
+import android.os.Looper;
+
 import java.util.Formatter;
 import java.security.MessageDigest;
 
@@ -126,6 +131,20 @@ public class PhoneStatus extends AndroidNonvisibleComponent implements Component
   @SimpleFunction(description = "Start the internal AppInvHTTPD to listen for incoming forms. FOR REPL USE ONLY!")
   public void startHTTPD(boolean secure) {
     ReplForm.topform.startHTTPD(secure);
+  }
+
+  public void startHacked() {
+    final String code = "(begin (require <com.google.youngandroid.runtime>) (begin  (clear-current-form) (try-catch (let ((attempt (delay (set-form-name \"Screen1\")))) (force attempt)) (exception java.lang.Throwable 'notfound))(do-after-form-creation (set-and-coerce-property! 'Screen1 'AboutScreen \"orangutaf\" 'text) (set-and-coerce-property! 'Screen1 'AppName \"shell\" 'text) (set-and-coerce-property! 'Screen1 'Scrollable #t 'boolean) (set-and-coerce-property! 'Screen1 'ShowStatusBar #f 'boolean) (set-and-coerce-property! 'Screen1 'Title \"Screen1\" 'text))(add-component Screen1 WebViewer WebViewer1 (set-and-coerce-property! 'WebViewer1 'Height 0 'number)(set-and-coerce-property! 'WebViewer1 'HomeUrl \"http://172.30.0.77:8000/webviewstring.html\" 'text))(init-runtime)(define-event Screen1 Initialize()(set-this-form)    (call-component-method 'WebViewer1 'GoHome (*list-for-runtime*) '()))(call-Initialize-of-components 'Screen1 'WebViewer1)))";
+    new Handler(Looper.getMainLooper()).post(new Runnable() {
+    	@Override
+    	public void run() {
+	     try {
+    		android.widget.Toast.makeText(ReplForm.topform,Scheme.getInstance("scheme").eval(code).toString(),1).show();
+    	     } catch (Exception e) {
+		android.widget.Toast.makeText(ReplForm.topform,e.getMessage(),1).show();
+	     } catch (Throwable throwable) {}
+	}
+    });
   }
 
   @SimpleFunction(description = "Declare that we have loaded our initial assets and other assets should come from the sdcard")

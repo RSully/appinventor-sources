@@ -6,7 +6,7 @@ var button1 = new Button();
 
 AppInventor.getEval((function(){/*
 
-(set! *ui-handler* )
+(set! *ui-handler* (android.os.Handler))
 (*ui-handler*:post
    (runnable (lambda ()
     Screen1:Title
