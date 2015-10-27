@@ -1,5 +1,5 @@
 function AIColor(r, g, b, a) {
-    if (typeof a == 'undefined') { a = 255; }
+    if (typeof a === 'undefined') { a = 255; }
     this.components = [r, g, b, a];
 }
 
