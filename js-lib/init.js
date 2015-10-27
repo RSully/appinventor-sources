@@ -1,3 +1,5 @@
+// sendEval, getEval, uiEval
+
 //AppInventor.sendEval('(reset-current-form-environment)');//("(clear-current-form)");
 AppInventor.getEval("(require <com.google.youngandroid.runtime>)");
 AppInventor.sendEval("(require <com.google.youngandroid.runtime>)");

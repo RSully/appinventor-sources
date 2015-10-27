@@ -477,51 +477,51 @@ public final class WebViewer extends AndroidViewComponent {
      *
      * @return string
      */
-    	@JavascriptInterface
-    	public String getWebViewString() {
-    	    return webViewString;
-    	}
+    @JavascriptInterface
+    public String getWebViewString() {
+      return webViewString;
+    }
 
-    	@JavascriptInterface
-    	public String getUIReturn() {
-    	    return uiReturn;
-    	}
+    @JavascriptInterface
+    public String getUIReturn() {
+      return uiReturn;
+    }
 
-	@JavascriptInterface
-	public void dispatchEvent(String eventName) {
-	  ScriptCallback(eventName);
-	}
-	
-	@JavascriptInterface
-	public String getEval(String input) {
-	    try {
-    		return scheme.eval(input).toString();
-    	    } catch (Exception e) {
-    		return "ERROR: "+e.getMessage();
-	    } catch (Throwable throwable) {
-    		return "nope2";
-    	    }
-	}
-	
-	@JavascriptInterface
-	public void sendEval(String input) {
-	     final String pass = input;
-	     new Handler(Looper.getMainLooper()).post(new Runnable() {
-    		@Override
-    		public void run() {
-		     try {
-    			uiReturn = Scheme.getInstance("scheme").eval(pass).toString();
-    		     } catch (Exception e) {
-    			uiReturn = "ERROR: "+e.getMessage();
-		     } catch (Throwable throwable) {}
-		}
-	    });
-	}
-
-        @JavascriptInterface
-        public void setWebViewString(String newString) {
-            webViewString = newString;
+    @JavascriptInterface
+    public void dispatchEvent(String eventName) {
+      ScriptCallback(eventName);
+    }
+    
+    @JavascriptInterface
+    public String getEval(String input) {
+      try {
+        return scheme.eval(input).toString();
+      } catch (Exception e) {
+        return "ERROR: "+e.getMessage();
+      } catch (Throwable throwable) {
+        return "nope2";
+      }
+    }
+    
+    @JavascriptInterface
+    public void sendEval(String input) {
+      final String pass = input;
+      new Handler(Looper.getMainLooper()).post(new Runnable() {
+        @Override
+        public void run() {
+          try {
+            uiReturn = Scheme.getInstance("scheme").eval(pass).toString();
+          } catch (Exception e) {
+            uiReturn = "ERROR: "+e.getMessage();
+          } catch (Throwable throwable) {}
         }
+      });
+    }
+
+    @JavascriptInterface
+    public void setWebViewString(String newString) {
+      webViewString = newString;
+    }
   }
 }
 

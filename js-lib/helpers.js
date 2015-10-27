@@ -6,3 +6,11 @@ Function.prototype.construct = function(aArgs) {
     this.apply(oNew, aArgs);
     return oNew;
 };
+
+
+AppInventor.uiEval = (function(val, callback) {
+    AppInventor.sendEval(val);
+    setTimeout(function(){
+        callback(AppInventor.getUIReturn());
+    }, 50);
+});
