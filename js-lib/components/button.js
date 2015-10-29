@@ -9,8 +9,8 @@ var AIButton = function() {
     this.type = "Button";
     this.name = name;
     this.init_props(["BackgroundColor", "Enabled", "FontBold", "FontItalic", "FontSize", "FontTypeface", "Height", "Image", "Shape", "ShowFeedback", "Text", "TextAlignment", "TextColor", "Visible", "Width"]);
-    this.init_events(["Click","GotFocus","LongClick","LostFocus","TouchDown","TouchUp"]);
-    Button.instances[name] = this;
+    this.init_events(["Click", "GotFocus", "LongClick", "LostFocus", "TouchDown", "TouchUp"]);
+    AIButton.instances[name] = this;
 };
 AIButton.prototype = Object.create(EventfulObject.prototype);
 AIButton.prototype.init_props = function(props) {
