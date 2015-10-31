@@ -66,16 +66,14 @@ function AIBaseComponent() {
     if (this.constructor.hasOwnProperty('events')) {
         AIBaseComponent.setupEvents.call(this);
     }
+
+    AIBaseComponent.instances[this.name] = this;
 };
 
-AIBaseComponent.uuid = 0;
+AIBaseComponent.uuid = 1;
 AIBaseComponent.instances = {};
 
 AIBaseComponent.setup = function(object) {
-    if (!this.instances.hasOwnProperty(object.name)) {
-        this.instances[object.name] = [];
-    }
-
     // Setup inheritance automatically
     object.prototype = Object.create(this.prototype);
     object.prototype.constructor = object;
@@ -92,13 +90,10 @@ AIBaseComponent.setupProperties = function(object) {
 
         Object.defineProperty(object.prototype, property, {
             get: function() {
-                console.log('called the getter!');
-                return 'woo return for ' + this.name;
-                //return AppInventor.getEval("("+this.name+":"+prop+")");
+                return AppInventor.getEval("(" + this.name + ":" + prop + ")");
             },
             set: function(value) {
-                console.log('called the setter for ' + this.name);
-                //AppInventor.sendEval("(set-and-coerce-property! '"+this.name+" '"+prop+" "+value+" '"+type+")");
+                AppInventor.sendEval("(set-and-coerce-property! '"+this.name+" '"+prop+" "+value+" '"+type+")");
             }
         });
     });
@@ -106,8 +101,7 @@ AIBaseComponent.setupProperties = function(object) {
 };
 
 AIBaseComponent.setupEvents = function() {
-    this.constructor.events.forEach(function(event){
-        //AppInventor.sendEval('(define-event '+that.name+' '+e+'()(set-this-form)\
-        //    ((WebViewer1:getView):evaluateJavascript "_.dispatch.emit(\''+e+'\', \''+that.name+'\')" #!null))');
+    this.constructor.events.forEach(function(eventName){
+        AppInventorEvents.register(eventName, this);
     }.bind(this));
 };
