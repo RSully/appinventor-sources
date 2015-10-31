@@ -6,7 +6,7 @@ AppInventorEvents = {
         }
         this.objects[eventName].push(instance.name);
 
-        AppInventor.sendEval('(define-event ' + instance.name + ' ' + eventName + '()(set-this-form)\
+        AppInventorEvalAsync('(define-event ' + instance.name + ' ' + eventName + '()(set-this-form)\
             ((WebViewer1:getView):evaluateJavascript "AppInventorEvents.emit(\'' + eventName + '\', \'' + instance.name + '\')" #!null))');
     },
     unregisterAll: function(instance) {
@@ -16,7 +16,18 @@ AppInventorEvents = {
     
     emit: function(eventName, instanceName) {
         console.log('got emit call for AppInventorEvents', eventName, instanceName);
-        // if this.objects[eventName] contains instanceName
-        // object = AIBaseComponent.instances[name]
+        
+        if (this.objects[eventName].indexOf(instanceName) === -1) {
+            console.log('instancename not found in objects', this.objects, instanceName)
+            return;
+        }
+
+        var object = AIBaseComponent.instances[instanceName];
+        if (typeof object === "undefined") {
+            console.log('got undefined for object instance');
+            return;
+        }
+        
+        object.trigger(eventName);
     }
 };

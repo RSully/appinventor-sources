@@ -2,9 +2,9 @@ function AIButton() {
     AIBaseComponent.call(this);
 
     // TODO: remove this default property:
-    AppInventor.sendEval("(set-and-coerce-property! '" + this.name + " 'Text \"New Button\" 'text)");
+    AppInventorEvalAsync("(set-and-coerce-property! '" + this.name + " 'Text \"New Button\" 'text)");
 
-    // if (AppInventor.getEval(name).indexOf('@') != -1) success!
+    // if (AppInventorEval(name).indexOf('@') != -1) success!
     // if (arguments.length == 2) use later for parent component
 };
 

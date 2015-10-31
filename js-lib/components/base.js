@@ -56,10 +56,15 @@ var AIProperties = {
     "AlignHorizontal": "number"
 };
 
-function AIBaseComponent() {
+function AIBaseComponent(existingName) {
     // Setup type + name
     this.type = this.constructor.name;
-    this.name = this.type + (AIBaseComponent.uuid++);
+    this.preexisting = typeof existingName !== "undefined";
+    if (this.preexisting) {
+        this.name = existingName;
+    } else {
+        this.name = this.type + (AIBaseComponent.uuid++);
+    }
 
     // Setup per-instance events
     if (this.constructor.hasOwnProperty('events')) {
@@ -73,11 +78,9 @@ function AIBaseComponent() {
     // so ideally we'd have like "addToScreen" and "removeFromScreen" maybe
     // and ideally Screen1 would not be hard-coded
     // TODO: move aiType retreival to method so it can be overriden in special cases
-    var aiType = this.type.substring(2);
-    // ideally there would be a way to say "this component exists in AI designer view"
-    // and use that to check instead of the type
-    if (aiType !== "Screen") {
-        AppInventor.sendEval("(add-component Screen1 " + aiType + " " + this.name + ")");
+    if (!this.preexisting) {
+        var aiType = this.type.substring(2);
+        AppInventorEvalAsync("(add-component Screen1 " + aiType + " " + this.name + ")");
     }
 };
 
@@ -101,10 +104,10 @@ AIBaseComponent.setupProperties = function(object) {
 
         Object.defineProperty(object.prototype, property, {
             get: function() {
-                return AppInventor.getEval("(" + this.name + ":" + property + ")");
+                return AppInventorEval("(" + this.name + ":" + property + ")");
             },
             set: function(value) {
-                AppInventor.sendEval("(set-and-coerce-property! '"+this.name+" '" + property + " " + value + " '" + type + ")");
+                AppInventorEvalAsync("(set-and-coerce-property! '" + this.name + " '" + property + " " + value + " '" + type + ")");
             }
         });
     });
@@ -112,7 +115,24 @@ AIBaseComponent.setupProperties = function(object) {
 };
 
 AIBaseComponent.setupEvents = function() {
+    this.eventHandlers = {};
     this.constructor.events.forEach(function(eventName){
+        this.eventHandlers[eventName] = [];
         AppInventorEvents.register(eventName, this);
     }.bind(this));
+};
+
+
+AIBaseComponent.prototype.trigger = function(eventName) {
+    this.eventHandlers[eventName].forEach(function(callback){
+        callback.call(this);
+    }.bind(this));
+};
+
+AIBaseComponent.prototype.on = function(eventName, callback) {
+    if (this.constructor.events.indexOf(eventName) === -1) {
+        // invalid event
+        return;
+    }
+    this.eventHandlers[eventName].push(callback);
 };
