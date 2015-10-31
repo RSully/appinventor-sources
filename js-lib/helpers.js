@@ -14,3 +14,8 @@ AppInventor.uiEval = (function(val, callback) {
         callback(AppInventor.getUIReturn());
     }, 50);
 });
+
+
+window.alert = (function(s) {
+    AppInventor.getEval('((android.widget.Toast:makeText Screen1 "'+s+'" 0):show)');
+});
