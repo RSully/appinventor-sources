@@ -1,4 +1,4 @@
-var AIScreen = function() {
+function AIScreen() {
     AIBaseComponent.call(this);
 };
 

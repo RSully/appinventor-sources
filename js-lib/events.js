@@ -2,9 +2,8 @@ AppInventorEvents = {
     objects: {},
     register: function(eventName, instance) {
         if (!this.objects.hasOwnProperty(eventName)) {
-            this.objects[eventName] = {};
+            this.objects[eventName] = [];
         }
-
         this.objects[eventName].push(instance.name);
 
         AppInventor.sendEval('(define-event ' + instance.name + ' ' + eventName + '()(set-this-form)\

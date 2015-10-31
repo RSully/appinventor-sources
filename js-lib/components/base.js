@@ -59,7 +59,6 @@ var AIProperties = {
 function AIBaseComponent() {
     // Setup type + name
     this.type = this.constructor.name;
-    AIBaseComponent.instances[this.type].push(this);
     this.name = this.type + (AIBaseComponent.uuid++);
 
     // Setup per-instance events
@@ -90,10 +89,10 @@ AIBaseComponent.setupProperties = function(object) {
 
         Object.defineProperty(object.prototype, property, {
             get: function() {
-                return AppInventor.getEval("(" + this.name + ":" + prop + ")");
+                return AppInventor.getEval("(" + this.name + ":" + property + ")");
             },
             set: function(value) {
-                AppInventor.sendEval("(set-and-coerce-property! '"+this.name+" '"+prop+" "+value+" '"+type+")");
+                AppInventor.sendEval("(set-and-coerce-property! '"+this.name+" '" + property + " " + value + " '" + type + ")");
             }
         });
     });
