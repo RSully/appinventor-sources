@@ -11,9 +11,9 @@ AIBaseComponent.setup(AIScreen);
 Object.defineProperty(AIScreen.prototype, 'Title', {
     get: function() {
         // This could actually use the default getter
-        return AppInventorEval(this.name+":Title");
+        return AppInventorEval(this.name + ':Title');
     },
     set: function(value) {
-        AppInventorEvalAsync('('+this.name+':setTitle "'+value+'")');
+        AppInventorEvalAsync('(' + this.name + ':setTitle ' + value + ')');
     }
 });
