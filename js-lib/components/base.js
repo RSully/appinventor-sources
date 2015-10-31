@@ -77,10 +77,7 @@ function AIBaseComponent() {
     // ideally there would be a way to say "this component exists in AI designer view"
     // and use that to check instead of the type
     if (aiType !== "Screen") {
-        console.log('adding because not screen: ' + this.name);
         AppInventor.sendEval("(add-component Screen1 " + aiType + " " + this.name + ")");
-    } else {
-        console.log('not adding cuz screen: ' + this.name);
     }
 };
 
