@@ -1,8 +1,6 @@
 function AIButton() {
     AIBaseComponent.call(this);
 
-    // TODO, abstract this:
-    AppInventor.sendEval("(add-component Screen1 Button " + this.name + ")");
     // TODO: remove this default property:
     AppInventor.sendEval("(set-and-coerce-property! '" + this.name + " 'Text \"New Button\" 'text)");
 

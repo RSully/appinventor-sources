@@ -67,6 +67,21 @@ function AIBaseComponent() {
     }
 
     AIBaseComponent.instances[this.name] = this;
+
+    // TODO: move this to another method or something
+    // TODO: allow removing components
+    // so ideally we'd have like "addToScreen" and "removeFromScreen" maybe
+    // and ideally Screen1 would not be hard-coded
+    // TODO: move aiType retreival to method so it can be overriden in special cases
+    var aiType = this.type.substring(2);
+    // ideally there would be a way to say "this component exists in AI designer view"
+    // and use that to check instead of the type
+    if (aiType !== "Screen") {
+        console.log('adding because not screen: ' + this.name);
+        AppInventor.sendEval("(add-component Screen1 " + aiType + " " + this.name + ")");
+    } else {
+        console.log('not adding cuz screen: ' + this.name);
+    }
 };
 
 AIBaseComponent.uuid = 1;
