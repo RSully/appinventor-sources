@@ -65,15 +65,13 @@ function AIBaseComponent() {
     this.name = this.type + (AIBaseComponent.uuid++);
 
     // Setup per-instance events
-    AIBaseComponent.setupEvents.call(this);
+    if (this.constructor.hasOwnProperty('events')) {
+        AIBaseComponent.setupEvents.call(this);
+    }
 };
 
 AIBaseComponent.uuid = 0;
 AIBaseComponent.instances = {};
-
-// Defaults for subclasses:
-AIBaseComponent.properties = [];
-AIBaseComponent.events = [];
 
 AIBaseComponent.setup = function(object) {
     if (!this.instances.hasOwnProperty(object.name)) {
@@ -85,7 +83,9 @@ AIBaseComponent.setup = function(object) {
     object.prototype.constructor = object;
 
     // Register properties
-    this.setupProperties(object);
+    if (object.hasOwnProperty('properties')) {
+        this.setupProperties(object);
+    }
 };
 
 AIBaseComponent.setupProperties = function(object) {
@@ -108,12 +108,7 @@ AIBaseComponent.setupProperties = function(object) {
 };
 
 AIBaseComponent.setupEvents = function() {
-    if (!this.constructor.hasOwnProperty('events')) {
-        return;
-    }
-
     this.constructor.events.forEach(function(event){
-        console.log('setting up ' + event + ' event for ' + this.name);
         //AppInventor.sendEval('(define-event '+that.name+' '+e+'()(set-this-form)\
         //    ((WebViewer1:getView):evaluateJavascript "_.dispatch.emit(\''+e+'\', \''+that.name+'\')" #!null))');
     }.bind(this));
