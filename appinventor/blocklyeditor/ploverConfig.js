@@ -7,6 +7,7 @@
     '../lib/blockly/src/core/blockly.js',
 
     //msg/js/*.js has to come next (for constants)
+    './src/msg/ko_kr/_messages.js',
     './src/msg/es_es/_messages.js',
     './src/msg/zh_tw/_messages.js',
     './src/msg/zh_cn/_messages.js',
@@ -88,6 +89,9 @@
     "./src/nameSet.js",
     "./src/substitution.js",
     "./src/language_switch.js",
+
+    // Dialog Utiltiy
+    "./src/util.js",
 
     // backpack files
     "./src/backpack.js",
