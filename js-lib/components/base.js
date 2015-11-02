@@ -81,6 +81,8 @@ function AIBaseComponent(existingName) {
     if (!this.preexisting) {
         var aiType = this.type.substring(2);
         AppInventorEvalAsync("(add-component Screen1 " + aiType + " " + this.name + ")");
+
+        // if (AppInventorEval(this.name).indexOf('@') !== -1) success!
     }
 };
 

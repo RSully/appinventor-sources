@@ -6,6 +6,9 @@ AppInventorEvents = {
         }
         this.objects[eventName].push(instance.name);
 
+        // event arguments:
+        // instance.constructor.events[eventName]
+
         AppInventorEvalAsync('(define-event ' + instance.name + ' ' + eventName + '()(set-this-form)\
             ((WebViewer1:getView):evaluateJavascript "AppInventorEvents.emit(\'' + eventName + '\', \'' + instance.name + '\')" #!null))');
     },

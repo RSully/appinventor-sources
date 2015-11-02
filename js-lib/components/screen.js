@@ -2,8 +2,37 @@ function AIScreen(existingName) {
     AIBaseComponent.call(this, existingName);
 };
 
-AIScreen.properties = ["AboutScreen", "AlignHorizontal", "AlignVertical", "BackgroundColor", "AppName", "BackgroundImage", "CloseScreenAnimation", "Height", "Icon", "OpenScreenAnimation", "ScreenOrientation", "Scrollable", "ShowStatusBar", "Sizing", "TitleVisible", "VersionCode", "VersionName", "Width"];
-AIScreen.events = ["BackPressed", "ErrorOccurred", "Initialize", "OtherScreenClosed", "ScreenOrientationChanged"];
+AIScreen.properties = [
+    "AboutScreen",
+    "AlignHorizontal",
+    "AlignVertical",
+    "BackgroundColor",
+    "AppName",
+    "BackgroundImage",
+    "CloseScreenAnimation",
+    "Height",
+    "Icon",
+    "OpenScreenAnimation",
+    "ScreenOrientation",
+    "Scrollable",
+    "ShowStatusBar",
+    "Sizing",
+    "TitleVisible",
+    "VersionCode",
+    "VersionName",
+    "Width"
+];
+AIScreen.events = {
+    "BackPressed": [],
+    "ErrorOccurred": [
+        "component", "text", "number", "text"
+    ],
+    "Initialize": [],
+    "OtherScreenClosed": [
+        "text", "any"
+    ],
+    "ScreenOrientationChanged": []
+};
 
 AIBaseComponent.setup(AIScreen);
 
