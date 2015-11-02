@@ -60,4 +60,7 @@ Properties = ["BackgroundColor","Enabled","FontBold","FontItalic","FontSize","Fo
 Events = ["AfterTimeSet()","GotFocus()","LostFocus()"]
 Methods = ["LaunchPicker()","SetTimeToDisplay(number hour, number minute)","SetTimeToDisplayFromInstant(InstantInTime instant)"]
 
+// Canvas
+Properties = ["BackgroundColor", "BackgroundImage", "FontSize", "Height", "LineWidth", "PaintColor", "TextAlignment", "Visible", "Width"]
+
 */

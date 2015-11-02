@@ -13,10 +13,10 @@ AppInventorEvents = {
         // todo, when an object is deleted/removed
         // loop through this.objects items, remove any instances of instance.name
     },
-    
+
     emit: function(eventName, instanceName) {
         console.log('got emit call for AppInventorEvents', eventName, instanceName);
-        
+
         if (this.objects[eventName].indexOf(instanceName) === -1) {
             console.log('instancename not found in objects', this.objects, instanceName)
             return;
@@ -27,7 +27,7 @@ AppInventorEvents = {
             console.log('got undefined for object instance');
             return;
         }
-        
+
         object.trigger(eventName);
     }
 };
