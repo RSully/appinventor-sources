@@ -6,9 +6,16 @@ canvas {
     margin: 0;
 }
 
+img { display: none; }
+
+body {
+  margin: 0;
+  zoom: 1.5;
+}
+
 @font-face {
     font-family: 'Space-Invaders';
-    src: url('Space-Invaders_gdi.ttf') format('truetype');
+    src: url('../font/Space-Invaders.ttf') format('truetype');
     font-weight: 400;
     font-style: normal;
     font-stretch: normal;

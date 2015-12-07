@@ -37,22 +37,114 @@ Timer.prototype = {
 	}
 }
 
+
+
+
+var fixHIDPI = function(canvas, context) {
+    // finally query the various pixel ratios
+        devicePixelRatio = window.devicePixelRatio || 1,
+        backingStoreRatio = context.webkitBackingStorePixelRatio ||
+                            context.mozBackingStorePixelRatio ||
+                            context.msBackingStorePixelRatio ||
+                            context.oBackingStorePixelRatio ||
+                            context.backingStorePixelRatio || 1,
+
+        ratio = devicePixelRatio / backingStoreRatio;
+
+    // upscale the canvas if the two ratios don't match
+    if (devicePixelRatio !== backingStoreRatio) {
+
+        var oldWidth = 320;
+        var oldHeight = 320;
+
+        canvas.width = oldWidth * ratio;
+        canvas.height = oldHeight * ratio;
+
+        canvas.style.width = oldWidth + 'px';
+        canvas.style.height = oldHeight + 'px';
+
+        // now scale the context to counter
+        // the fact that we've manually scaled
+        // our canvas element
+        context.scale(ratio, ratio);
+
+    }
+};
+
 var startScreen = (function() {
 	ctx.textBaseline = 'middle';
   ctx.textAlign = 'center';
 	ctx.font = '20px "Space-Invaders"';
 	ctx.fillStyle = '#ffffff';
-	ctx.fillText("Press    Start  ", 160, 70);
+	ctx.fillText("press   start", 160, 70);
 });
 
+var drawScore = (function() {
+	ctx.textBaseline = 'top';
+  ctx.textAlign = 'left';
+	ctx.font = '10px "Space-Invaders"';
+	ctx.strokeStyle = '#00ff00';
+	ctx.lineWidth = 0;
+	ctx.fillStyle = '#ffffff';
+	ctx.fillText("score < 0 >", 4, 2); //static
+	ctx.fillText("hi-score", 136, 2);
+	ctx.fillText("score < 4 >", 252, 2); //static
+	ctx.fillText("credit    00", 248, 306); //static
+	ctx.fillText("3", 4, 306);
+	ctx.beginPath();
+	ctx.moveTo(0,304);
+	ctx.lineTo(320,304);
+	ctx.stroke();
+});
+
+var xoff = 15;
+var frame = true;
+var drawInvaders = function() {
+	var currentState = [4,4,4,4,4,4,4,4,4,4];
+	var sp = 26;
+	xoff+=0.1;
+	frame = !frame;
+	var q = (frame+1)+"";
+	currentState.forEach(function(e,i) {
+		ctx.drawImage(window['enemy1_'+q],xoff+(i*sp),30,19,19);
+		ctx.drawImage(window['enemy2_'+q],xoff+(i*sp),56,19,16);
+		ctx.drawImage(window['enemy2_'+q],xoff+(i*sp),79,19,16);
+		ctx.drawImage(window['enemy3_'+q],xoff+(i*sp),102,19,16);
+		ctx.drawImage(window['enemy3_'+q],xoff+(i*sp),125,19,16);
+	});
+};
+
+var getFont = function() {
+	return new Promise(function (resolve, reject) {
+		FontFaceOnload("Space-Invaders", {
+		    success: resolve,
+		    error: reject,
+		    timeout: 5000
+		});
+	});
+};
+
 var ctx = document.getElementById('canvas').getContext('2d');
-//ctx.textBaseline = 'middle';
-//ctx.textAlign = 'left';
+var enemy1_1 = document.getElementById("enemy1_1");
+var enemy1_2 = document.getElementById("enemy1_2");
+var enemy2_1 = document.getElementById("enemy2_1");
+var enemy2_2 = document.getElementById("enemy2_2");
+var enemy3_1 = document.getElementById("enemy3_1");
+var enemy3_2 = document.getElementById("enemy3_2");
+var ship = document.getElementById("ship");
+
+
+fixHIDPI(canvas, ctx);
+//ctx.imageSmoothingEnabled = true;
+//ctx.translate(0.5, 0.5); //fixes pixel ratio
+
 var timer = new Timer({
 	fps: 30,
 	run: function() {
 		ctx.clearRect(0, 0, 320, 320); //be more specific
-		startScreen();
+		//startScreen();
+		drawInvaders();
+		drawScore();
 	}
 });
 //tmp state so that speed doesn't change until loops ends
@@ -66,21 +158,15 @@ audio.addEventListener('ended',function(){
 			audioWait = newWait;
 		audio.src = "snd/0.wav";
 	}
-	else audio.src = "snd/"+(parseInt(cur)+1)+".ogg";
+	else audio.src = "snd/"+(parseInt(cur)+1)+".wav";
   audio.pause();
   audio.load();
 	if (audioPlay) setTimeout(function(){
   	audio.play();
 	}, audioWait);
 });
-audio.play();
-
-FontFaceOnload("Space-Invaders", {
-    success: function() {
-			//$('#a0').play();
-			timer.start();
-			timer.stop();
-		},
-    error: function() {},
-    timeout: 5000
+//audio.play();
+getFont().then(function () {
+	timer.start();
+	//timer.stop();
 });
