@@ -10,8 +10,3 @@ window.requestAnimFrame = (function(){
 
 // usage:
 // instead of setInterval(render, 16) ....
-
-(function animloop(){
-  requestAnimFrame(animloop);
-  render();
-})();
