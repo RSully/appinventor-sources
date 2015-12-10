@@ -2,7 +2,7 @@ function Game(canvas, context, invaderImages, playerImage) {
     this.canvas = canvas;
     this.context = context;
 
-    this.padding = {x: 14, y: 19};
+    this.padding = {x: 14, y: 40};
 
     this.level = 1;
     this.lifes = 3;
@@ -16,11 +16,21 @@ function Game(canvas, context, invaderImages, playerImage) {
     for (var x = 0; x < Game.INVADER_COLS; x++) {
         this.invaders.push([]);
         for (var y = 0; y < Game.INVADER_ROWS; y++) {
+            // Start them at the padding distance
+            var invaderOffsetY = this.padding.y;
+            // But as soon as you get to 2nd row,
+            // just add 7 pixels to the bottom of the last
+            if (y > 0) {
+                var lastInvader = this.invaders[x][y-1];
+                invaderOffsetY = lastInvader.y + lastInvader.height;
+                invaderOffsetY += 7;
+            }
+
             this.invaders[x].push(new Invader({
                 alive: true,
                 images: invaderImages[y].images,
                 x: this.padding.x + (x * 26),
-                y: this.padding.y + (y * invaderImages[Math.max(y-1, 0)].height),
+                y: invaderOffsetY,
                 width: 19,
                 height: invaderImages[y].height
             }));
@@ -38,7 +48,7 @@ function Game(canvas, context, invaderImages, playerImage) {
      * How long inbetween each invader movement
      * Value in miliseconds
      */
-    this.invadersDelay = 600;
+    this.invadersDelay = 100; // TODO 600;
     this.invadersSpeed = {x: 5, y: 5};
 
     var playerSettings = Object.create(playerImage);
@@ -103,6 +113,8 @@ Game.prototype.tick = function(forced) {
 
     this.context.clearRect(0, 0, 320, 320);
 
+    this.drawInterface();
+
     if (currentTime >= this.lastInvaderUpdate + this.invadersDelay) {
         this.updateInvaders();
         this.lastInvaderUpdate = currentTime;
@@ -146,7 +158,7 @@ Game.prototype.updateInvaders = function() {
     }
 
     // Limit how low the invaders may travel:
-    if (last.y + last.height >= 250) {
+    if (last.y + last.height >= 200) {
         shouldIncrementRow = false;
         // TODO: increase speed?
     }
@@ -162,6 +174,38 @@ Game.prototype.updateInvaders = function() {
             invader.y += this.invadersSpeed.y;
         }
     }.bind(this));
+};
+
+
+Game.prototype.drawInterface = function() {
+    // Drawing setup
+    this.context.textBaseline = 'top';
+    this.context.textAlign = 'left';
+    this.context.font = '10px "Space-Invaders"';
+    this.context.strokeStyle = '#00ff00';
+    this.context.lineWidth = 0;
+    this.context.fillStyle = '#ffffff';
+
+
+    // Score labels for player 1,2
+    this.context.fillText("score < 1 >", 4, 2);
+    this.context.fillText("hi-score", 136, 2);
+    this.context.fillText("score < 2 >", 252, 2);
+
+    // Scores for player 1, high score, player 2
+    this.context.fillText("0000", 18, 18);
+    this.context.fillText("0000", 148, 18);
+    this.context.fillText("0000", 266, 18);
+
+    // Bottom of UI
+    this.context.fillText("credit    00", 248, 306);
+    // lifes left
+    this.context.fillText("3", 4, 306);
+    // green line
+    this.context.beginPath();
+    this.context.moveTo(0,304);
+    this.context.lineTo(320,304);
+    this.context.stroke();
 };
 
 Game.prototype.drawInvaders = function() {
