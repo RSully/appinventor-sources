@@ -2,26 +2,45 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Screen1 custom title</title>
 
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
-
-    <script src="/js-lib/helpers.js"></script>
-    <script src="/js-lib/events.js"></script>
-
-    <script src="/js-lib/types/text.js"></script>
-    <script src="/js-lib/types/bool.js"></script>
-
-    <script src="/js-lib/components/base.js"></script>
-    <script src="/js-lib/components/screen.js"></script>
-    <script src="/js-lib/components/button.js"></script>
+    <title>Space Invaders</title>
 
 
-    <script src="/js-lib/init.js"></script>
-    <script src="/js-lib/app.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+
+    <!-- <script src="js/helpers.js"></script>
+    <script src="js/events.js"></script>
+
+    <script src="js/types/text.js"></script>
+    <script src="js/types/bool.js"></script>
+
+    <script src="js/components/base.js"></script>
+    <script src="js/components/screen.js"></script>
+    <script src="js/components/button.js"></script>
+
+    <script src="js/init.js"></script> -->
+
+    <script src="js/Timer.js"></script>
+    <script src="js/canvas.js"></script>
+
+    <script src="js/game/Game.js"></script>
+    <script src="js/game/Invader.js"></script>
 </head>
 <body>
-    <h1>herro</h1>
+    <canvas id="canvas" width="320" height="320"></canvas>
+
+    <div id="canvasAssets">
+        <!-- By putting images here they should load before app.js is executed -->
+        <img id="ship" src="img/ship.png">
+        <img id="enemy1_1" src="img/enemy1_1.png">
+        <img id="enemy1_2" src="img/enemy1_2.png">
+        <img id="enemy2_1" src="img/enemy2_1.png">
+        <img id="enemy2_2" src="img/enemy2_2.png">
+        <img id="enemy3_1" src="img/enemy3_1.png">
+        <img id="enemy3_2" src="img/enemy3_2.png">
+        <img id="laser" src="img/laser.png">
+    </div>
+
+    <script src="js/app.js"></script>
 </body>
 </html>
