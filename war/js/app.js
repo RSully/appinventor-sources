@@ -39,5 +39,32 @@ var invaderImages = [
         width: 19, height: 16
     }
 ];
-var game = new Game(canvas, context, invaderImages);
+var playerImage = {
+    image: document.getElementById('ship'),
+    width: 20, height: 12
+};
+var game = new Game(canvas, context, invaderImages, playerImage);
+
+document.addEventListener('keydown', function(event){
+    if (event.keyCode === 37) {
+        game.setMoveLeft(true);
+    } else if (event.keyCode === 39) {
+        game.setMoveRight(true);
+    }
+});
+
+document.addEventListener('keyup', function(event){
+    if (event.keyCode === 37) {
+        game.setMoveLeft(false);
+    } else if (event.keyCode === 39) {
+        game.setMoveRight(false);
+    }
+});
+
+document.addEventListener('keypress', function(event){
+    if (event.keyCode === 32) {
+        game.fireLaser();
+    }
+});
+
 game.start();

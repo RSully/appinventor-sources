@@ -1,4 +1,4 @@
-function Game(canvas, context, invaderImages) {
+function Game(canvas, context, invaderImages, playerImage) {
     this.canvas = canvas;
     this.context = context;
 
@@ -41,7 +41,10 @@ function Game(canvas, context, invaderImages) {
     this.invadersDelay = 600;
     this.invadersSpeed = {x: 5, y: 5};
 
-    this.player = null;
+    var playerSettings = Object.create(playerImage);
+    playerSettings.x = 154;
+    playerSettings.y = 266;
+    this.player = new Player(playerSettings);
 
     this.invadersLasers = [];
     this.playersLasers = [];
@@ -100,14 +103,31 @@ Game.prototype.tick = function(forced) {
 
     this.context.clearRect(0, 0, 320, 320);
 
-    if (currentTime > this.lastInvaderUpdate + this.invadersDelay) {
+    if (currentTime >= this.lastInvaderUpdate + this.invadersDelay) {
         this.updateInvaders();
         this.lastInvaderUpdate = currentTime;
     }
+    this.updatePlayer();
+
     this.checkCollisions();
+
+    this.player.draw(this.context);
     this.drawInvaders();
 };
 
+
+Game.prototype.updatePlayer = function() {
+    var speed = 1;
+    var direction = this.player.getMovementMultipler();
+
+    if (direction < 0 && this.player.x <= this.padding.x) {
+        speed = 0;
+    } else if (direction > 0 && this.player.x >= 320 - this.padding.x) {
+        speed = 0;
+    }
+
+    this.player.x += speed * direction;
+};
 
 Game.prototype.updateInvaders = function() {
     var all = this.getInvaders();
@@ -155,6 +175,14 @@ Game.prototype.fireLaser = function() {
     // TODO
     // append to this.playersLasers
 };
+
+Game.prototype.setMoveLeft = function(leftPressed) {
+    this.player.movement.left = leftPressed;
+};
+
+Game.prototype.setMoveRight = function(rightPressed) {
+    this.player.movement.right = rightPressed;
+}
 
 
 Game.prototype.checkCollisions = function() {
