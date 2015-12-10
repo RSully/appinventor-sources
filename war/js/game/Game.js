@@ -143,7 +143,7 @@ Game.prototype.tick = function(forced) {
 
 
 Game.prototype.updatePlayer = function() {
-    var speed = 1;
+    var speed = 2;
     var direction = this.player.getMovementMultipler();
 
     if (direction < 0 && this.player.x <= this.padding.x) {
