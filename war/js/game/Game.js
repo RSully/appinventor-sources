@@ -137,7 +137,6 @@ Game.prototype.tick = function(forced) {
 
     this.player.draw(this.context);
     this.drawInvaders();
-
     this.drawLasers();
 };
 
@@ -193,10 +192,10 @@ Game.prototype.updateInvaders = function() {
 Game.prototype.updateLasers = function() {
     var speed = 3;
 
-    this.playerLasers = this.playersLasers.filter(function(laser) {
+    this.playersLasers = this.playersLasers.filter(function(laser) {
         laser.y -= speed;
 
-        if (laser.y + laser.height <= 0) {
+        if (laser.y + laser.height <= 40) {
             return false;
         }
         return true;
