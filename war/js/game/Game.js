@@ -193,6 +193,7 @@ Game.prototype.updateLasers = function() {
     var speed = 3;
 
     this.playersLasers = this.playersLasers.filter(function(laser) {
+        if (laser.y == 130) speed = 0;
         laser.y -= speed;
 
         if (laser.y + laser.height <= 40) {
@@ -280,6 +281,11 @@ Game.prototype.setMoveRight = function(rightPressed) {
 
 
 Game.prototype.checkCollisions = function() {
+    game.getActiveInvaders().map(function(invader) {
+        return game.playersLasers.map(function(laser) {
+
+        });
+    });
     // TODO
     // check this.playersLasers against this.getInvaders()
     // check this.invadersLasers against this.player
