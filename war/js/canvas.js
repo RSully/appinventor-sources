@@ -26,3 +26,12 @@ function canvasFixDPI(canvas, context) {
         context.scale(ratio, ratio);
     }
 };
+
+function inRect(point, rect) {
+    return (
+        point.x > rect.x &&
+        point.x < (rect.width + rect.x) &&
+        point.y > rect.y &&
+        point.y < (rect.height + rect.y)
+    );
+}

@@ -192,24 +192,27 @@ Game.prototype.updateInvaders = function() {
 Game.prototype.updateLasers = function() {
     var speed = 3;
 
-    this.playersLasers = this.playersLasers.filter(function(laser) {
-        if (laser.y == 130) speed = 0;
+    for (var i = 0; i < this.playersLasers.length; ++i) {
+        var laser = this.playersLasers[i];
+
         laser.y -= speed;
 
+        // When offscreen remove:
         if (laser.y + laser.height <= 40) {
-            return false;
+            this.playersLasers.splice(i--, 1);
         }
-        return true;
-    });
+    }
 
-    this.invadersLasers = this.invadersLasers.filter(function(laser) {
+    for (var i = 0; i < this.invadersLasers.length; --i) {
+        var laser = this.invadersLasers[i];
+
         laser.y += speed;
 
+        // When offscreen remove:
         if (laser.y >= 320) {
-            return false;
+            this.invadersLasers.splice(i--, 1);
         }
-        return true;
-    });
+    }
 };
 
 
@@ -281,13 +284,24 @@ Game.prototype.setMoveRight = function(rightPressed) {
 
 
 Game.prototype.checkCollisions = function() {
-    this.getActiveInvaders().map(function(invader) {
-        return this.playersLasers.map(function(laser) {
+    this.getActiveInvaders().forEach(function(invader) {
+        for (var i = 0; i < this.playersLasers.length; ++i) {
+            if (inRect(this.playersLasers[i], invader)) {
+                invader.alive = false;
 
-        });
+                this.playersLasers.splice(i--, 1);
+            }
+        }
     }.bind(this));
-    // TODO
-    // check this.playersLasers against this.getInvaders()
-    // check this.invadersLasers against this.player
-    // check this.invadersLasers against barriers (not implemented yet)
+
+    for (var i = 0; i < this.invadersLasers.length; ++i) {
+        if (inRect(this.invadersLasers[i], this.player)) {
+            this.lifes -= 1;
+            // TODO: reset the game?
+
+            this.invadersLasers.splice(i--, 1);
+        }
+    }
+
+    // TODO: check this.invadersLasers against barriers (not implemented yet)
 };
