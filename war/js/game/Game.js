@@ -92,13 +92,14 @@ Game.prototype.tick = function(forced) {
     if (this.paused && !forced) {
         return;
     }
-
+    var currentTime = (new Date()).getTime();
     // main game loop:
 
     this.context.clearRect(0, 0, 320, 320);
-    if (this.lastInvaderUpdate + 600 < (new Date()).getTime()) {
+
+    if (currentTime > this.lastInvaderUpdate + this.invadersDelay) {
         this.updateInvaders();
-        this.lastInvaderUpdate = (new Date()).getTime();
+        this.lastInvaderUpdate = currentTime;
     }
     this.checkCollisions();
     this.drawInvaders();
@@ -114,11 +115,12 @@ Game.prototype.updateInvaders = function() {
         invader.incrementState();
     });
 
+    var padding = 0;
+
     // Change direction left/right:
-    if (first.x <= this.padding) {
+    if (first.x <= padding) {
         this.invadersDirection = 1;
-    } else if (last.y + last.width >= 320 - this.padding) {
-        // TODO line above, don't hardcode 320
+    } else if (last.y + last.width >= 320 - padding) {
         this.invadersDirection = -1;
     }
 
