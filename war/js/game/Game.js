@@ -225,7 +225,7 @@ Game.prototype.drawInterface = function() {
     // Bottom of UI
     this.context.fillText("credit    00", 248, 306);
     // lifes left
-    this.context.fillText("3", 4, 306);
+    this.context.fillText(this.lifes, 4, 306);
     // green line
     this.context.beginPath();
     this.context.moveTo(0,304);
