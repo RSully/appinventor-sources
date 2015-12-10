@@ -156,8 +156,8 @@ var drawInvaders = function(timestamp) {
             } else incr *= -1.05;
         }
         qqq = timestamp;
-        //frame ^= 1;
-        //xoff+=incr;
+        frame ^= 1;
+        xoff+=incr;
     }
     //end timing crap
     var a = (frame+1)+"";
