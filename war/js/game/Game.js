@@ -122,7 +122,7 @@ Game.prototype.updatePlayer = function() {
 
     if (direction < 0 && this.player.x <= this.padding.x) {
         speed = 0;
-    } else if (direction > 0 && this.player.x >= 320 - this.padding.x) {
+    } else if (direction > 0 && this.player.x + this.player.width >= 320 - this.padding.x) {
         speed = 0;
     }
 
@@ -146,7 +146,7 @@ Game.prototype.updateInvaders = function() {
     }
 
     // Limit how low the invaders may travel:
-    if (last.y >= 300) {
+    if (last.y + last.height >= 250) {
         shouldIncrementRow = false;
         // TODO: increase speed?
     }
