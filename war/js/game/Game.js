@@ -1,4 +1,4 @@
-function Game(canvas, context, invaderImages, playerImage) {
+function Game(canvas, context, invaderImages, playerImage, laserImage) {
     this.canvas = canvas;
     this.context = context;
 
@@ -8,6 +8,8 @@ function Game(canvas, context, invaderImages, playerImage) {
     this.lifes = 3;
     this.paused = true;
 
+    // Cache this for when we create lasers dynamically
+    this.laserImage = laserImage;
 
     /**
      * Defined as invaders[column][row] from top-left to bottom-right
@@ -120,11 +122,14 @@ Game.prototype.tick = function(forced) {
         this.lastInvaderUpdate = currentTime;
     }
     this.updatePlayer();
+    this.updateLasers();
 
     this.checkCollisions();
 
     this.player.draw(this.context);
     this.drawInvaders();
+
+    this.drawLasers();
 };
 
 
@@ -176,6 +181,26 @@ Game.prototype.updateInvaders = function() {
     }.bind(this));
 };
 
+Game.prototype.updateLasers = function() {
+    this.playerLasers = this.playersLasers.filter(function(laser) {
+        laser.y -= 3;
+
+        if (laser.y + laser.height <= 0) {
+            return false;
+        }
+        return true;
+    });
+
+    this.invadersLasers = this.invadersLasers.filter(function(laser) {
+        laser.y += 3;
+
+        if (laser.y >= 320) {
+            return false;
+        }
+        return true;
+    });
+};
+
 
 Game.prototype.drawInterface = function() {
     // Drawing setup
@@ -210,14 +235,32 @@ Game.prototype.drawInterface = function() {
 
 Game.prototype.drawInvaders = function() {
     this.getInvaders().forEach(function(invader) {
+        if (!invader.alive) {
+            return;
+        }
         invader.draw(this.context);
+    }.bind(this));
+};
+
+Game.prototype.drawLasers = function() {
+    var lasers = this.invadersLasers.concat(this.playersLasers);
+
+    lasers.forEach(function(laser) {
+        laser.draw(this.context);
     }.bind(this));
 };
 
 
 Game.prototype.fireLaser = function() {
-    // TODO
-    // append to this.playersLasers
+    // TODO: rate limit
+
+    this.playersLasers.push(new Laser({
+        image: this.laserImage.image,
+        x: this.player.x + 10,
+        y: this.player.y - this.laserImage.height,
+        width: this.laserImage.width,
+        height: this.laserImage.height
+    }));
 };
 
 Game.prototype.setMoveLeft = function(leftPressed) {

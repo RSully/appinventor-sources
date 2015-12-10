@@ -43,7 +43,11 @@ var playerImage = {
     image: document.getElementById('ship'),
     width: 20, height: 12
 };
-var game = new Game(canvas, context, invaderImages, playerImage);
+var laserImage = {
+    image: document.getElementById('laser'),
+    width: 1, height: 4
+};
+var game = new Game(canvas, context, invaderImages, playerImage, laserImage);
 
 document.addEventListener('keydown', function(event){
     if (event.keyCode === 37) {
@@ -61,6 +65,9 @@ document.addEventListener('keyup', function(event){
     }
 });
 
+// TODO: require key up event before firing again
+// probably best to refactor this into the keydown/keyup
+// just using keypress for easy development for now
 document.addEventListener('keypress', function(event){
     if (event.keyCode === 32) {
         game.fireLaser();
