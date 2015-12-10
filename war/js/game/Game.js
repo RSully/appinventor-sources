@@ -86,6 +86,15 @@ Game.prototype.getInvaders = function() {
 };
 
 /**
+ * Helper function to get invaders who are alive
+ */
+Game.prototype.getActiveInvaders = function() {
+    return this.getInvaders().filter(function(invader) {
+        return invader.alive;
+    });
+};
+
+/**
  * Helper functions to easily get first (top left) and last (bottom right)
  * invader objects optimally (i.e. without `getInvaders()`)
  */
@@ -234,10 +243,7 @@ Game.prototype.drawInterface = function() {
 };
 
 Game.prototype.drawInvaders = function() {
-    this.getInvaders().forEach(function(invader) {
-        if (!invader.alive) {
-            return;
-        }
+    this.getActiveInvaders().forEach(function(invader) {
         invader.draw(this.context);
     }.bind(this));
 };
