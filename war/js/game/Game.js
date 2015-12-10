@@ -281,11 +281,11 @@ Game.prototype.setMoveRight = function(rightPressed) {
 
 
 Game.prototype.checkCollisions = function() {
-    game.getActiveInvaders().map(function(invader) {
-        return game.playersLasers.map(function(laser) {
+    this.getActiveInvaders().map(function(invader) {
+        return this.playersLasers.map(function(laser) {
 
         });
-    });
+    }.bind(this));
     // TODO
     // check this.playersLasers against this.getInvaders()
     // check this.invadersLasers against this.player
