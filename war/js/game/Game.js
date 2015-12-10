@@ -191,8 +191,10 @@ Game.prototype.updateInvaders = function() {
 };
 
 Game.prototype.updateLasers = function() {
+    var speed = 3;
+
     this.playerLasers = this.playersLasers.filter(function(laser) {
-        laser.y -= 3;
+        laser.y -= speed;
 
         if (laser.y + laser.height <= 0) {
             return false;
@@ -201,7 +203,7 @@ Game.prototype.updateLasers = function() {
     });
 
     this.invadersLasers = this.invadersLasers.filter(function(laser) {
-        laser.y += 3;
+        laser.y += speed;
 
         if (laser.y >= 320) {
             return false;
