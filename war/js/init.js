@@ -11,3 +11,6 @@ AppInventor.sendEval('(WebViewer1:Height '+AppInventor.getEval('(WebViewer1:Widt
 
 AppInventor.sendEval('(((WebViewer1:getView):getClass):setWebContentsDebuggingEnabled #t)');
 AppInventor.sendEval('(((WebViewer1:getView):clearCache #t)');
+
+
+// TODO preload sounds/images
