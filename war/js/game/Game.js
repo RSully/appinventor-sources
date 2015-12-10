@@ -2,6 +2,8 @@ function Game(canvas, context, invaderImages) {
     this.canvas = canvas;
     this.context = context;
 
+    this.padding = {x: 14, y: 19};
+
     this.level = 1;
     this.lifes = 3;
     this.paused = true;
@@ -17,8 +19,8 @@ function Game(canvas, context, invaderImages) {
             this.invaders[x].push(new Invader({
                 alive: true,
                 images: invaderImages[y].images,
-                x: 14+(x*26),
-                y: 19+(y*invaderImages[Math.max(y-1, 0)].height),
+                x: this.padding.x + (x * 26),
+                y: this.padding.y + (y * invaderImages[Math.max(y-1, 0)].height),
                 width: 19,
                 height: invaderImages[y].height
             }));
@@ -37,6 +39,7 @@ function Game(canvas, context, invaderImages) {
      * Value in miliseconds
      */
     this.invadersDelay = 600;
+    this.invadersSpeed = {x: 5, y: 5};
 
     this.player = null;
 
@@ -111,24 +114,34 @@ Game.prototype.updateInvaders = function() {
     var first = this.getFirstInvader();
     var last = this.getLastInvader();
 
-    all.forEach(function(invader){
-        invader.incrementState();
-    });
-
-    var padding = 0;
+    var shouldIncrementRow = false;
 
     // Change direction left/right:
-    if (first.x <= padding) {
+    if (first.x <= this.padding.x) {
         this.invadersDirection = 1;
-    } else if (last.y + last.width >= 320 - padding) {
+        shouldIncrementRow = true;
+    } else if (last.x + last.width >= 320 - this.padding.x) {
         this.invadersDirection = -1;
+        shouldIncrementRow = true;
     }
 
-    // TODO
-    // update positions:
-    // check first/last invaders to see if we need to change direction
-    // var firstInvader = this.getFirstInvader();
-    // var lastInvader = this.getLastInvader();
+    // Limit how low the invaders may travel:
+    if (last.y >= 300) {
+        shouldIncrementRow = false;
+        // TODO: increase speed?
+    }
+
+
+    all.forEach(function(invader){
+        invader.incrementState();
+
+        // TODO: only increment X if not incrementing row?
+        invader.x += this.invadersDirection * this.invadersSpeed.x;
+
+        if (shouldIncrementRow) {
+            invader.y += this.invadersSpeed.y;
+        }
+    }.bind(this));
 };
 
 Game.prototype.drawInvaders = function() {
