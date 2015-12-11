@@ -4,7 +4,7 @@ function Player(settings) {
     this.y = settings.y;
     this.width = settings.width || this.image.width;
     this.height = settings.height || this.image.height;
-
+    this.lifes = 3;
     /**
      * An object that signifies if the user is pressing left/right buttons
      */

@@ -131,7 +131,7 @@ Game.prototype.tick = function(timeDelta, timeCurrent) {
         this.updateInvaders(timeDelta);
         this.lastInvaderUpdate = timeCurrent;
     }
-    if (Math.floor(Math.random() * 5) === 4) {
+    if (Math.floor(Math.random() * 50) === 4) {
         // TODO: only get invader on last row
         var shootingInvader = this.getRandomActiveInvader();
         this.invadersLasers.push(new Laser({
@@ -254,6 +254,12 @@ Game.prototype.drawInterface = function() {
     this.context.fillText("credit    00", 248, 306);
     // lifes left
     this.context.fillText(this.lifes, 4, 306);
+    for (var i = 0; i < this.lifes; i++)
+      this.context.drawImage(
+        game.player.image,
+        20+(i*26), 306,
+        game.player.width, game.player.height
+      );
     // green line
     this.context.beginPath();
     this.context.moveTo(0,304);
