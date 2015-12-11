@@ -91,6 +91,11 @@ Game.prototype.getActiveInvaders = function() {
     });
 };
 
+Game.prototype.getRandomActiveInvader = function() {
+    var all = this.getActiveInvaders();
+    return all[Math.floor(Math.random() * all.length)];
+}
+
 /**
  * Helper functions to easily get first (top left) and last (bottom right)
  * invader objects optimally (i.e. without `getInvaders()`)
@@ -126,6 +131,17 @@ Game.prototype.tick = function(timeDelta, timeCurrent) {
         this.updateInvaders(timeDelta);
         this.lastInvaderUpdate = timeCurrent;
     }
+    if (Math.floor(Math.random() * 5) === 4) {
+        var shootingInvader = this.getRandomActiveInvader();
+        this.invadersLasers.push(new Laser({
+            image: this.laserImage.image,
+            width: this.laserImage.width,
+            height: this.laserImage.height,
+            x: rectMidX(shootingInvader),
+            y: rectBottom(shootingInvader)
+        }));
+    }
+
     this.updatePlayer(timeDelta);
     this.updateLasers(timeDelta);
 
@@ -200,7 +216,7 @@ Game.prototype.updateLasers = function(timeDelta) {
         }
     }
 
-    for (var i = 0; i < this.invadersLasers.length; --i) {
+    for (var i = 0; i < this.invadersLasers.length; ++i) {
         var laser = this.invadersLasers[i];
 
         laser.y += offset;
@@ -264,10 +280,10 @@ Game.prototype.fireLaser = function() {
 
     this.playersLasers.push(new Laser({
         image: this.laserImage.image,
-        x: this.player.x + 10,
-        y: this.player.y - this.laserImage.height,
         width: this.laserImage.width,
-        height: this.laserImage.height
+        height: this.laserImage.height,
+        x: this.player.x + 10,
+        y: this.player.y - this.laserImage.height
     }));
 };
 

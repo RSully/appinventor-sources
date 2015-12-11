@@ -20,6 +20,13 @@ function rectBottom(rect) {
     return rect.y + rect.height;
 }
 
+function rectMidX(rect) {
+    return rect.x + (rect.width / 2);
+}
+function rectMidY(rect) {
+    return rect.y + (rect.height / 2);
+}
+
 function rectTopLeft(rect) {
     return {x: rect.x, y: rect.y};
 }
