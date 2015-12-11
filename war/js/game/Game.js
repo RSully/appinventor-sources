@@ -138,7 +138,7 @@ Game.prototype.tick = function(timeDelta, timeCurrent) {
 
 
 Game.prototype.updatePlayer = function(timeDelta) {
-    var speed = 60/1000 * timeDelta;
+    var speed = 60/1000;
     var direction = this.player.getMovementMultipler();
 
     if (direction < 0 && this.player.x <= this.padding.x) {
@@ -147,7 +147,7 @@ Game.prototype.updatePlayer = function(timeDelta) {
         speed = 0;
     }
 
-    this.player.x += speed * direction;
+    this.player.x += timeDelta * speed * direction;
 };
 
 Game.prototype.updateInvaders = function(timeDelta) {
@@ -186,12 +186,13 @@ Game.prototype.updateInvaders = function(timeDelta) {
 };
 
 Game.prototype.updateLasers = function(timeDelta) {
-    var speed = 90/1000 * timeDelta;
+    var speed = 90/1000;
+    var offset = speed * timeDelta;
 
     for (var i = 0; i < this.playersLasers.length; ++i) {
         var laser = this.playersLasers[i];
 
-        laser.y -= speed;
+        laser.y -= offset;
 
         // When offscreen remove:
         if (laser.y + laser.height <= 40) {
@@ -202,7 +203,7 @@ Game.prototype.updateLasers = function(timeDelta) {
     for (var i = 0; i < this.invadersLasers.length; --i) {
         var laser = this.invadersLasers[i];
 
-        laser.y += speed;
+        laser.y += offset;
 
         // When offscreen remove:
         if (laser.y >= 320) {
