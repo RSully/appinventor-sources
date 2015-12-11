@@ -286,7 +286,7 @@ Game.prototype.setMoveRight = function(rightPressed) {
 Game.prototype.checkCollisions = function() {
     this.getActiveInvaders().forEach(function(invader) {
         for (var i = 0; i < this.playersLasers.length; ++i) {
-            if (inRect(this.playersLasers[i], invader)) {
+            if (rectIntersectsRect(this.playersLasers[i], invader)) {
                 invader.alive = false;
 
                 this.playersLasers.splice(i--, 1);
@@ -295,7 +295,7 @@ Game.prototype.checkCollisions = function() {
     }.bind(this));
 
     for (var i = 0; i < this.invadersLasers.length; ++i) {
-        if (inRect(this.invadersLasers[i], this.player)) {
+        if (rectIntersectsRect(this.invadersLasers[i], this.player)) {
             this.lifes -= 1;
             // TODO: reset the game?
 
