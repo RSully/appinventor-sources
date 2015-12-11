@@ -4,6 +4,8 @@ function Timer(callback) {
     this.id = null;
 }
 
+Timer.MAX_LAG = 100;
+
 Timer.prototype.start = function() {
     if (this.id !== null) return;
     this.lastTimestamp = performance.now();
@@ -20,6 +22,17 @@ Timer.prototype.tick = function(timestamp) {
     // Call this before callback() so that you can call stop() from it:
     this.id = window.requestAnimationFrame(this.tick.bind(this));
 
-    this.callback(timestamp - this.lastTimestamp, timestamp);
+    var delta = timestamp - this.lastTimestamp;
+    /**
+     * If delta is too high then we're going to act as if the loop was paused
+     * This is a good indication that the browser was not in the foreground
+     * for this period of time.
+     */
+    if (delta > Timer.MAX_LAG) {
+        this.lastTimestamp = timestamp;
+        return;
+    }
+
+    this.callback(delta, timestamp);
     this.lastTimestamp = timestamp;
 }
