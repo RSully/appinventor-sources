@@ -1,34 +1,25 @@
-function Timer(settings) {
-    this.settings = settings;
-    this.timer = null;
-
-    this.fps = settings.fps || 30;
-    this.interval = Math.floor(1000 / this.fps);
-    this.timeInit = null;
+function Timer(callback) {
+    this.callback = callback;
+    this.lastTimestamp = null;
+    this.id = null;
 }
 
-Timer.prototype = {
-    run: function() {
-        this.settings.run();
-        this.timeInit += this.interval;
+Timer.prototype.start = function() {
+    if (this.id !== null) return;
+    this.lastTimestamp = performance.now();
+    this.id = window.requestAnimationFrame(this.tick.bind(this));
+};
 
-        this.timer = setTimeout(
-            function() {
-                this.run()
-            }.bind(this),
-            this.timeInit - (new Date).getTime()
-        );
-    },
+Timer.prototype.stop = function() {
+    if (this.id === null) return;
+    window.cancelAnimationFrame(this.id);
+    this.id = null;
+}
 
-    start: function() {
-        if (this.timer == null) {
-            this.timeInit = (new Date).getTime();
-            this.run();
-        }
-    },
+Timer.prototype.tick = function(timestamp) {
+    // Call this before callback() so that you can call stop() from it:
+    this.id = window.requestAnimationFrame(this.tick.bind(this));
 
-    stop: function() {
-        clearTimeout(this.timer);
-        this.timer = null;
-    }
+    this.callback(timestamp - this.lastTimestamp, timestamp);
+    this.lastTimestamp = timestamp;
 }

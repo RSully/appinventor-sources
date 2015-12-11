@@ -26,3 +26,5 @@ function canvasFixDPI(canvas, context) {
         context.scale(ratio, ratio);
     }
 };
+
+var FRAMES30_PER_MS = 30 / 1000;

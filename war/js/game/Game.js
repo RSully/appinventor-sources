@@ -51,7 +51,7 @@ function Game(canvas, context, invaderImages, playerImage, laserImage) {
      * Value in miliseconds
      */
     this.invadersDelay = 100; // TODO 600;
-    this.invadersSpeed = {x: 5, y: 5};
+    this.invadersSpeed = {x: 150/1000, y: 150/1000};
 
     var playerSettings = Object.create(playerImage);
     playerSettings.x = 154;
@@ -63,13 +63,10 @@ function Game(canvas, context, invaderImages, playerImage, laserImage) {
 
 
     this.lastInvaderUpdate = 0;
+    this.lastFrameRequest = 0;
 
-    this.timer = new Timer({
-        fps: 30,
-        run: this.tick.bind(this)
-    });
+    this.timer = new Timer(this.tick.bind(this));
     this.timer.start();
-    this.tick(true);
 }
 
 Game.INVADER_COLS = 10;
@@ -115,23 +112,22 @@ Game.prototype.pause = function() {
     this.paused = true;
 };
 
-Game.prototype.tick = function(forced) {
-    if (this.paused && !forced) {
+Game.prototype.tick = function(timeDelta, timeCurrent) {
+    if (this.paused) {
         return;
     }
-    var currentTime = (new Date()).getTime();
     // main game loop:
 
     this.context.clearRect(0, 0, 320, 320);
 
     this.drawInterface();
 
-    if (currentTime >= this.lastInvaderUpdate + this.invadersDelay) {
-        this.updateInvaders();
-        this.lastInvaderUpdate = currentTime;
+    if (timeCurrent >= this.lastInvaderUpdate + this.invadersDelay) {
+        this.updateInvaders(timeDelta);
+        this.lastInvaderUpdate = timeCurrent;
     }
-    this.updatePlayer();
-    this.updateLasers();
+    this.updatePlayer(timeDelta);
+    this.updateLasers(timeDelta);
 
     this.checkCollisions();
 
@@ -141,8 +137,8 @@ Game.prototype.tick = function(forced) {
 };
 
 
-Game.prototype.updatePlayer = function() {
-    var speed = 2;
+Game.prototype.updatePlayer = function(timeDelta) {
+    var speed = 60/1000 * timeDelta;
     var direction = this.player.getMovementMultipler();
 
     if (direction < 0 && this.player.x <= this.padding.x) {
@@ -154,7 +150,7 @@ Game.prototype.updatePlayer = function() {
     this.player.x += speed * direction;
 };
 
-Game.prototype.updateInvaders = function() {
+Game.prototype.updateInvaders = function(timeDelta) {
     var all = this.getInvaders();
     var first = this.getFirstInvader();
     var last = this.getLastInvader();
@@ -181,16 +177,16 @@ Game.prototype.updateInvaders = function() {
         invader.incrementState();
 
         // TODO: only increment X if not incrementing row?
-        invader.x += this.invadersDirection * this.invadersSpeed.x;
+        invader.x += this.invadersDirection * this.invadersSpeed.x * timeDelta;
 
         if (shouldIncrementRow) {
-            invader.y += this.invadersSpeed.y;
+            invader.y += this.invadersSpeed.y * timeDelta;
         }
     }.bind(this));
 };
 
-Game.prototype.updateLasers = function() {
-    var speed = 3;
+Game.prototype.updateLasers = function(timeDelta) {
+    var speed = 90/1000 * timeDelta;
 
     for (var i = 0; i < this.playersLasers.length; ++i) {
         var laser = this.playersLasers[i];
