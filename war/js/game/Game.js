@@ -132,6 +132,7 @@ Game.prototype.tick = function(timeDelta, timeCurrent) {
         this.lastInvaderUpdate = timeCurrent;
     }
     if (Math.floor(Math.random() * 5) === 4) {
+        // TODO: only get invader on last row
         var shootingInvader = this.getRandomActiveInvader();
         this.invadersLasers.push(new Laser({
             image: this.laserImage.image,
