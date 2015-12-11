@@ -50,7 +50,7 @@ function Game(canvas, context, invaderImages, playerImage, laserImage) {
      * How long inbetween each invader movement
      * Value in miliseconds
      */
-    this.invadersDelay = 100; // TODO 600;
+    this.invadersDelay = 600;
     this.invadersSpeed = {x: 150/1000, y: 150/1000};
 
     var playerSettings = Object.create(playerImage);
