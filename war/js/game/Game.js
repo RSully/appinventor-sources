@@ -60,6 +60,9 @@ function Game(canvas, context, invaderImages, playerImage, laserImage) {
     playerSettings.score = 0;
     this.player = new Player(playerSettings);
 
+    this.fireDelay = 500;
+    this.lastFire = 0;
+
     this.invadersLasers = [];
     this.playersLasers = [];
 
@@ -298,7 +301,10 @@ Game.prototype.drawLasers = function() {
 
 
 Game.prototype.fireLaser = function() {
-    // TODO: rate limit
+    var timeCurrent = performance.now();
+    if (timeCurrent < this.lastFire + this.fireDelay) {
+        return;
+    }
 
     this.playersLasers.push(new Laser({
         image: this.laserImage.image,
@@ -307,6 +313,8 @@ Game.prototype.fireLaser = function() {
         x: this.player.x + 10,
         y: this.player.y - this.laserImage.height
     }));
+
+    this.lastFire = timeCurrent;
 };
 
 Game.prototype.setMoveLeft = function(leftPressed) {
