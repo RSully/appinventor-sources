@@ -1,15 +1,17 @@
 function Player(settings) {
-    this.image = settings.image;
-    this.x = settings.x;
-    this.y = settings.y;
-    this.width = settings.width || this.image.width;
-    this.height = settings.height || this.image.height;
-    this.lifes = 3;
+    ImageView.call(this, settings);
+
+    this.lives = settings.lives || 3;
+    this.score = settings.score || 0;
     /**
      * An object that signifies if the user is pressing left/right buttons
      */
     this.movement = {left: false, right: false};
 }
+
+Player.prototype = Object.create(ImageView.prototype);
+Player.prototype.constructor = Player;
+
 
 /**
  * If both (or neither) keys are pressed, return 0
@@ -20,17 +22,4 @@ Player.prototype.getMovementMultipler = function() {
     if (this.movement.left) { ret -= 1; }
     if (this.movement.right) { ret += 1; }
     return ret;
-};
-
-
-Player.prototype.getImage = function() {
-    return this.image;
-};
-
-Player.prototype.draw = function(ctx) {
-    ctx.drawImage(
-        this.image,
-        this.x, this.y,
-        this.width, this.height
-    );
 };

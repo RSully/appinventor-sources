@@ -5,7 +5,6 @@ function Game(canvas, context, invaderImages, playerImage, laserImage) {
     this.padding = {x: 14, y: 40};
 
     this.level = 1;
-    this.lifes = 3;
     this.paused = true;
 
     // Cache this for when we create lasers dynamically
@@ -95,7 +94,6 @@ Game.prototype.getBottomMostAliveInvaders = function() {
     var invaders = [];
     for (var x = 0; x < Game.INVADER_COLS; ++x) {
         for (var y = Game.INVADER_ROWS - 1; y >= 0; --y) {
-            console.log(x, y);
             var invader = this.invaders[x][y];
             if (invader.alive) {
                 invaders.push(invader);
@@ -267,10 +265,10 @@ Game.prototype.drawInterface = function() {
     // Bottom of UI
     this.context.fillText("credit    00", 248, 306);
     // lifes left
-    this.context.fillText(this.lifes, 4, 306);
-    for (var i = 0; i < this.lifes; i++)
+    this.context.fillText(this.player.lives, 4, 306);
+    for (var i = 0; i < this.player.lives; i++)
       this.context.drawImage(
-        game.player.image,
+        this.player.getImage(),
         20+(i*26), 306,
         game.player.width, game.player.height
       );
@@ -322,6 +320,7 @@ Game.prototype.checkCollisions = function() {
         for (var i = 0; i < this.playersLasers.length; ++i) {
             if (rectIntersectsRect(this.playersLasers[i], invader)) {
                 invader.alive = false;
+                this.player.score += invader.points;
 
                 this.playersLasers.splice(i--, 1);
             }
