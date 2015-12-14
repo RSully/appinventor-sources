@@ -140,18 +140,20 @@ Game.prototype.tick = function(timeDelta, timeCurrent) {
     if (timeCurrent >= this.lastInvaderUpdate + this.invadersDelay) {
         this.updateInvaders(timeDelta);
         this.lastInvaderUpdate = timeCurrent;
-    }
-    if (Math.floor(Math.random() * 50) === 4) {
-        // TODO: only get invader on last row
-        var shootingInvader = this.getBottomMostAliveInvaders().getRandom();
-        if (shootingInvader) {
-            this.invadersLasers.push(new Laser({
-                image: this.laserImage.image,
-                width: this.laserImage.width,
-                height: this.laserImage.height,
-                x: rectMidX(shootingInvader),
-                y: rectBottom(shootingInvader)
-            }));
+
+        // TODO: change randomness here
+        // Currently this could return 0,1 so we have 50% chance:
+        if (Math.floor(Math.random() * 2) === 1) {
+            var shootingInvader = this.getBottomMostAliveInvaders().getRandom();
+            if (shootingInvader) {
+                this.invadersLasers.push(new Laser({
+                    image: this.laserImage.image,
+                    width: this.laserImage.width,
+                    height: this.laserImage.height,
+                    x: rectMidX(shootingInvader),
+                    y: rectBottom(shootingInvader)
+                }));
+            }
         }
     }
 
