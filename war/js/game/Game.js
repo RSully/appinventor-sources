@@ -245,7 +245,7 @@ Game.prototype.updateLasers = function(timeDelta) {
         laser.y += offset;
 
         // When offscreen remove:
-        if (laser.y >= 320) {
+        if (laser.y + laser.height >= 320 - 16) {
             this.invadersLasers.splice(i--, 1);
         }
     }
@@ -284,8 +284,8 @@ Game.prototype.drawInterface = function() {
         );
     // green line
     this.context.beginPath();
-    this.context.moveTo(0,304);
-    this.context.lineTo(320,304);
+    this.context.moveTo(0, 304);
+    this.context.lineTo(320, 304);
     this.context.stroke();
 };
 
