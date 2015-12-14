@@ -28,6 +28,8 @@ function Game(canvas, context, invaderImages, playerImage, laserImage) {
             }
 
             this.invaders[x].push(new Invader({
+                // 10 points per each 2 rows starting at bottom
+                points: Math.ceil((Game.INVADER_ROWS - y) / 2) * 10,
                 alive: true,
                 images: invaderImages[y].images,
                 x: this.padding.x + (x * 26),
@@ -55,6 +57,7 @@ function Game(canvas, context, invaderImages, playerImage, laserImage) {
     var playerSettings = Object.create(playerImage);
     playerSettings.x = 154;
     playerSettings.y = 266;
+    playerSettings.score = 0;
     this.player = new Player(playerSettings);
 
     this.invadersLasers = [];
@@ -258,9 +261,9 @@ Game.prototype.drawInterface = function() {
     this.context.fillText("score < 2 >", 252, 2);
 
     // Scores for player 1, high score, player 2
-    this.context.fillText("0000", 18, 18);
-    this.context.fillText("0000", 148, 18);
-    this.context.fillText("0000", 266, 18);
+    this.context.fillText(pad(this.player.score, 4), 18, 18);
+    this.context.fillText(pad(0, 4), 148, 18);
+    this.context.fillText(pad(0, 4), 266, 18);
 
     // Bottom of UI
     this.context.fillText("credit    00", 248, 306);

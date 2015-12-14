@@ -2,6 +2,7 @@ function Invader(settings) {
     ImageView.call(this, settings);
 
     this.alive = settings.alive || true;
+    this.points = settings.points || 0;
 
     // index of image
     this.state = settings.state || 0;
