@@ -49,11 +49,16 @@ var laserImage = {
 };
 var game = new Game(canvas, context, invaderImages, playerImage, laserImage);
 
+var spaceReleased = true;
+
 document.addEventListener('keydown', function(event){
     if (event.keyCode === 37) {
         game.setMoveLeft(true);
     } else if (event.keyCode === 39) {
         game.setMoveRight(true);
+    } else if (event.keyCode === 32 && spaceReleased) {
+        spaceReleased = false;
+        game.fireLaser();
     }
 });
 
@@ -62,15 +67,8 @@ document.addEventListener('keyup', function(event){
         game.setMoveLeft(false);
     } else if (event.keyCode === 39) {
         game.setMoveRight(false);
-    }
-});
-
-// TODO: require key up event before firing again
-// probably best to refactor this into the keydown/keyup
-// just using keypress for easy development for now
-document.addEventListener('keypress', function(event){
-    if (event.keyCode === 32) {
-        game.fireLaser();
+    } else if (event.keyCode === 32) {
+        spaceReleased = true;
     }
 });
 
