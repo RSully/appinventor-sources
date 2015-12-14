@@ -266,13 +266,13 @@ Game.prototype.drawInterface = function() {
     // Scores for player 1, high score, player 2
     this.context.fillText(pad(this.player.score, 4), 18, 18);
     this.context.fillText(pad(0, 4), 148, 18);
-    this.context.fillText(pad(0, 4), 266, 18);
+    // this.context.fillText(pad(0, 4), 266, 18);
 
     // Bottom of UI
     this.context.fillText("credit    00", 248, 306);
     // lifes left
     this.context.fillText(this.player.lives, 4, 306);
-    for (var i = 0; i < this.player.lives; i++)
+    for (var i = 0; i < this.player.lives - 1; i++)
         this.context.drawImage(
             this.player.getImage(),
             20 + (i * 26), 306,
