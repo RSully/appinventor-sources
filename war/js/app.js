@@ -47,7 +47,12 @@ var laserImage = {
     image: document.getElementById('laser'),
     width: 1, height: 4
 };
-var game = new Game(canvas, context, invaderImages, playerImage, laserImage);
+
+var game = new Game(
+    canvas, context,
+    window.localStorage,
+    invaderImages, playerImage, laserImage
+);
 
 var spaceReleased = true;
 

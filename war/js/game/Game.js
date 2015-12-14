@@ -1,6 +1,9 @@
-function Game(canvas, context, invaderImages, playerImage, laserImage) {
+function Game(canvas, context, storage, invaderImages, playerImage, laserImage) {
     this.canvas = canvas;
     this.context = context;
+
+    this.storage = storage;
+    this.highscore = parseInt(storage.getItem(Game.HIGHSCORE_KEY), 10) || 0;
 
     this.padding = {x: 14, y: 40};
 
@@ -76,6 +79,7 @@ function Game(canvas, context, invaderImages, playerImage, laserImage) {
 
 Game.INVADER_COLS = 10;
 Game.INVADER_ROWS = 5;
+Game.HIGHSCORE_KEY = 'game_highscore';
 
 
 /**
@@ -265,7 +269,7 @@ Game.prototype.drawInterface = function() {
 
     // Scores for player 1, high score, player 2
     this.context.fillText(pad(this.player.score, 4), 18, 18);
-    this.context.fillText(pad(0, 4), 148, 18);
+    this.context.fillText(pad(this.highscore, 4), 148, 18);
     // this.context.fillText(pad(0, 4), 266, 18);
 
     // Bottom of UI
@@ -325,13 +329,20 @@ Game.prototype.setMoveRight = function(rightPressed) {
     this.player.movement.right = rightPressed;
 }
 
+Game.prototype.setScore = function(newScore) {
+    this.player.score = newScore;
+    if (newScore > this.highscore) {
+        this.highscore = newScore;
+        this.storage.setItem(Game.HIGHSCORE_KEY, newScore);
+    }
+}
 
 Game.prototype.checkCollisions = function() {
     this.getAliveInvaders().forEach(function(invader) {
         for (var i = 0; i < this.playersLasers.length; ++i) {
             if (rectIntersectsRect(this.playersLasers[i], invader)) {
                 invader.alive = false;
-                this.player.score += invader.points;
+                this.setScore(this.player.score + invader.points);
 
                 this.playersLasers.splice(i--, 1);
             }
