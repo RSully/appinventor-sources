@@ -351,7 +351,7 @@ Game.prototype.checkCollisions = function() {
 
     for (var i = 0; i < this.invadersLasers.length; ++i) {
         if (rectIntersectsRect(this.invadersLasers[i], this.player)) {
-            this.lifes -= 1;
+            this.player.lives -= 1;
             // TODO: reset the game?
 
             this.invadersLasers.splice(i--, 1);
