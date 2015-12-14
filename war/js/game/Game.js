@@ -354,6 +354,10 @@ Game.prototype.checkCollisions = function() {
             this.player.lives -= 1;
             // TODO: reset the game?
 
+            if (this.player.lives < 1) {
+                // TODO: game over
+            }
+
             this.invadersLasers.splice(i--, 1);
         }
     }
