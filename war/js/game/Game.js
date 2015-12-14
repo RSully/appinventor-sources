@@ -85,16 +85,26 @@ Game.prototype.getInvaders = function() {
 /**
  * Helper function to get invaders who are alive
  */
-Game.prototype.getActiveInvaders = function() {
+Game.prototype.getAliveInvaders = function() {
     return this.getInvaders().filter(function(invader) {
         return invader.alive;
     });
 };
 
-Game.prototype.getRandomActiveInvader = function() {
-    var all = this.getActiveInvaders();
-    return all[Math.floor(Math.random() * all.length)];
-}
+Game.prototype.getBottomMostAliveInvaders = function() {
+    var invaders = [];
+    for (var x = 0; x < Game.INVADER_COLS; ++x) {
+        for (var y = Game.INVADER_ROWS - 1; y >= 0; --y) {
+            console.log(x, y);
+            var invader = this.invaders[x][y];
+            if (invader.alive) {
+                invaders.push(invader);
+                break;
+            }
+        }
+    }
+    return invaders;
+};
 
 /**
  * Helper functions to easily get first (top left) and last (bottom right)
@@ -133,7 +143,7 @@ Game.prototype.tick = function(timeDelta, timeCurrent) {
     }
     if (Math.floor(Math.random() * 50) === 4) {
         // TODO: only get invader on last row
-        var shootingInvader = this.getRandomActiveInvader();
+        var shootingInvader = this.getBottomMostAliveInvaders().getRandom();
         this.invadersLasers.push(new Laser({
             image: this.laserImage.image,
             width: this.laserImage.width,
@@ -268,7 +278,7 @@ Game.prototype.drawInterface = function() {
 };
 
 Game.prototype.drawInvaders = function() {
-    this.getActiveInvaders().forEach(function(invader) {
+    this.getAliveInvaders().forEach(function(invader) {
         invader.draw(this.context);
     }.bind(this));
 };
@@ -304,7 +314,7 @@ Game.prototype.setMoveRight = function(rightPressed) {
 
 
 Game.prototype.checkCollisions = function() {
-    this.getActiveInvaders().forEach(function(invader) {
+    this.getAliveInvaders().forEach(function(invader) {
         for (var i = 0; i < this.playersLasers.length; ++i) {
             if (rectIntersectsRect(this.playersLasers[i], invader)) {
                 invader.alive = false;
