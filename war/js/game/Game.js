@@ -144,13 +144,15 @@ Game.prototype.tick = function(timeDelta, timeCurrent) {
     if (Math.floor(Math.random() * 50) === 4) {
         // TODO: only get invader on last row
         var shootingInvader = this.getBottomMostAliveInvaders().getRandom();
-        this.invadersLasers.push(new Laser({
-            image: this.laserImage.image,
-            width: this.laserImage.width,
-            height: this.laserImage.height,
-            x: rectMidX(shootingInvader),
-            y: rectBottom(shootingInvader)
-        }));
+        if (shootingInvader) {
+            this.invadersLasers.push(new Laser({
+                image: this.laserImage.image,
+                width: this.laserImage.width,
+                height: this.laserImage.height,
+                x: rectMidX(shootingInvader),
+                y: rectBottom(shootingInvader)
+            }));
+        }
     }
 
     this.updatePlayer(timeDelta);
