@@ -273,11 +273,11 @@ Game.prototype.drawInterface = function() {
     // lifes left
     this.context.fillText(this.player.lives, 4, 306);
     for (var i = 0; i < this.player.lives; i++)
-      this.context.drawImage(
-        this.player.getImage(),
-        20+(i*26), 306,
-        game.player.width, game.player.height
-      );
+        this.context.drawImage(
+            this.player.getImage(),
+            20 + (i * 26), 306,
+            game.player.width, game.player.height
+        );
     // green line
     this.context.beginPath();
     this.context.moveTo(0,304);
