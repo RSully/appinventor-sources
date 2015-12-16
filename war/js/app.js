@@ -39,6 +39,10 @@ var invaderImages = [
         width: 19, height: 16
     }
 ];
+var mysteryInvaderImage = {
+    image: document.getElementById('enemy_mystery'),
+    width: 19, height: 10
+};
 var playerImage = {
     image: document.getElementById('ship'),
     width: 20, height: 12
@@ -51,7 +55,7 @@ var laserImage = {
 var game = new Game(
     canvas, context,
     window.localStorage,
-    invaderImages, playerImage, laserImage
+    invaderImages, mysteryInvaderImage, playerImage, laserImage
 );
 
 var spaceReleased = true;

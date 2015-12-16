@@ -1,4 +1,8 @@
-function Game(canvas, context, storage, invaderImages, playerImage, laserImage) {
+function Game(
+    canvas, context,
+    storage,
+    invaderImages, mysteryInvaderImage, playerImage, laserImage
+) {
     this.canvas = canvas;
     this.context = context;
 
@@ -42,6 +46,11 @@ function Game(canvas, context, storage, invaderImages, playerImage, laserImage) 
             }));
         }
     }
+
+    this.mysteryInvader = null;
+    this.mysteryInvaderDirection = 0;
+    this.mysteryInvaderImage = mysteryInvaderImage;
+
     /**
      * This is the direction multipler for the offset
      * so, if 1, moving right, if -1, moving left
@@ -163,8 +172,38 @@ Game.prototype.tick = function(timeDelta, timeCurrent) {
                 }));
             }
         }
+
+        /**
+         * Handle mystery invader
+         * Either update the existing one or create one randomly
+         */
+        if (
+            this.mysteryInvader === null &&
+            this.getAliveInvaders()[0].y > this.padding.y + this.mysteryInvaderImage.height + 8 &&
+            Math.floor(Math.random() * 20) === 1
+        ) {
+            this.mysteryInvaderDirection = Math.floor(Math.random() * 2) === 1 ? -1 : 1;
+
+            var mysteryX = this.mysteryInvaderDirection < 0 ? 320 : -1 * this.mysteryInvaderImage.width;
+            var mysteryY = this.padding.y + Math.floor(Math.random() * (this.getAliveInvaders()[0].y - this.padding.y - 8))
+
+            this.mysteryInvader = new Invader({
+                // normally the points are random unless a certain # of shots
+                // source: http://www.classicgaming.cc/classics/spaceinvaders/playguide.php
+                // source: http://spaceinvaders.wikia.com/wiki/UFO
+                points: 100,
+                images: [this.mysteryInvaderImage.image],
+                x: mysteryX,
+                y: mysteryY,
+                width: this.mysteryInvaderImage.width,
+                height: this.mysteryInvaderImage.height
+            });
+        }
     }
 
+    if (this.mysteryInvader) {
+        this.updateMysteryInvader(timeDelta);
+    }
     this.updatePlayer(timeDelta);
     this.updateLasers(timeDelta);
 
@@ -172,6 +211,9 @@ Game.prototype.tick = function(timeDelta, timeCurrent) {
 
     this.player.draw(this.context);
     this.drawInvaders();
+    if (this.mysteryInvader) {
+        this.mysteryInvader.draw(this.context);
+    }
     this.drawLasers();
 };
 
@@ -224,8 +266,22 @@ Game.prototype.updateInvaders = function(timeDelta) {
     }.bind(this));
 };
 
+Game.prototype.updateMysteryInvader = function (timeDelta) {
+    var speed = 40/1000;
+    this.mysteryInvader.x += (speed * timeDelta) * this.mysteryInvaderDirection;
+
+    /**
+     * If offscreen, remove
+     */
+    if (this.mysteryInvader.x + this.mysteryInvader.width < 0 ||
+        this.mysteryInvader.x > 320
+    ) {
+        this.mysteryInvader = null;
+    }
+};
+
 Game.prototype.updateLasers = function(timeDelta) {
-    var speed = 90/1000;
+    var speed = 110/1000;
     var offset = speed * timeDelta;
 
     for (var i = 0; i < this.playersLasers.length; ++i) {
@@ -338,7 +394,11 @@ Game.prototype.setScore = function(newScore) {
 }
 
 Game.prototype.checkCollisions = function() {
-    this.getAliveInvaders().forEach(function(invader) {
+    var invaders = this.getAliveInvaders();
+    if (this.mysteryInvader !== null) {
+        invaders.push(this.mysteryInvader);
+    }
+    invaders.forEach(function(invader) {
         for (var i = 0; i < this.playersLasers.length; ++i) {
             if (rectIntersectsRect(this.playersLasers[i], invader)) {
                 invader.alive = false;
@@ -348,6 +408,13 @@ Game.prototype.checkCollisions = function() {
             }
         }
     }.bind(this));
+
+    /**
+     * If we just found a collision and he died get rid of him
+     */
+    if (this.mysteryInvader !== null && this.mysteryInvader.alive === false) {
+        this.mysteryInvader = null;
+    }
 
     for (var i = 0; i < this.invadersLasers.length; ++i) {
         if (rectIntersectsRect(this.invadersLasers[i], this.player)) {
