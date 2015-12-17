@@ -3,6 +3,9 @@ function Game(
     storage,
     invaderImages, mysteryInvaderImage, playerImage, laserImage
 ) {
+    this.showStart = false;
+    this.showEnd = false;
+
     this.canvas = canvas;
     this.context = context;
 
@@ -140,16 +143,16 @@ Game.prototype.getBottomMostAliveInvaders = function() {
 };
 
 Game.prototype.getClosestInvaders = function() {
-  return this.getBottomMostAliveInvaders().filter(function(invader) {
-    return rectIntersectsRect(game.player, {
-      x: invader.x,
-      y:260,
-      width:invader.width,
-      height:invader.height
+    return this.getBottomMostAliveInvaders().filter(function(invader) {
+        return rectIntersectsRect(game.player, {
+            x: invader.x,
+            y:260,
+            width:invader.width,
+            height:invader.height
+        });
+    }).filter(function(invader) {
+        return Math.abs(invader.x-game.player.x) < 10
     });
-  }).filter(function(invader) {
-    return Math.abs(invader.x-game.player.x) < 10
-  });
 };
 
 /**
@@ -174,7 +177,11 @@ Game.prototype.pause = function() {
 };
 
 Game.prototype.tick = function(timeDelta, timeCurrent) {
-    if (this.paused) {
+    if (this.showStart) {
+        // todo
+    } else if (this.showEnd) {
+        // todo
+    }else if (this.paused) {
         return;
     }
     // main game loop:
