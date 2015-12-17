@@ -551,10 +551,10 @@ Game.prototype.checkCollisions = function() {
         }
     }
     for (var j = 0; j < this.barriers.length; ++j) {
-        (checkBarrier.bind(this))(this.playersLasers, j, 3);
+        Barrier.check.call(this, this.playersLasers, j, 3);
         if (this.barriers[j].blobs.length > 100) {
             continue;
         }
-        (checkBarrier.bind(this))(this.invadersLasers, j, 3);
+        Barrier.check.call(this, this.invadersLasers, j, 3);
     }
 };
