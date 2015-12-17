@@ -11,7 +11,7 @@
 
 var canvas = document.getElementById("canvas");
 var context = canvas.getContext("2d");
-canvasFixDPI(canvas, context);
+//canvasFixDPI(canvas, context);
 
 /**
  * Each invaderImages[n] represents a row
@@ -51,6 +51,21 @@ var laserImage = {
     image: document.getElementById('laser'),
     width: 1, height: 4
 };
+var barrierImage = {
+    image: document.getElementById('barrier'),
+    width: 33, height: 24
+};
+var blobImage = {
+    image: document.getElementById('blob'),
+    width: 8, height: 6
+};
+var pBlobImage = {
+    image: document.getElementById('pBlob'),
+    width: 8, height: 6
+};
+
+var explosionImage = document.getElementById('explosion');
+var playerDeath = [document.getElementById('death0'), document.getElementById('death1')];
 
 var game = new Game(
     canvas, context,
