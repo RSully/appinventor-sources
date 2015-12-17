@@ -178,9 +178,15 @@ Game.prototype.pause = function() {
 
 Game.prototype.tick = function(timeDelta, timeCurrent) {
     if (this.showStart) {
-        // todo
+        this.context.clearRect(0, 0, 320, 320);
+        this.drawStart();
+        this.drawInterface(true);
+        this.pause();
+        return;
     } else if (this.showEnd) {
-        // todo
+        this.drawEnd();
+        this.pause();
+        return;
     }else if (this.paused) {
         return;
     }
@@ -392,8 +398,39 @@ Game.prototype.updateLasers = function(timeDelta) {
     }
 };
 
+Game.prototype.drawStart = function() {
+    this.context.textBaseline = 'middle';
+    this.context.textAlign = 'center';
+    this.context.font = '16px "Space-Invaders"';
+    this.context.fillStyle = '#ffffff';
+    this.context.fillText("play", 160, 60);
+    this.context.fillText("space     invaders", 160, 100);
+    this.context.fillText("*score advance table*", 160, 140);
+    //show points text
+    this.context.fillText("    =?  mystery", 180, 175);
+    this.context.fillText("   =30  points", 180, 205);
+    this.context.fillText("   =20  points", 180, 235);
+    this.context.fillText("   =10  points", 180, 265);
+    //draw icons
+    var mystery = new ImageView(mysteryInvaderImage);
+    mystery.x = 100; mystery.y = 166; mystery.draw(this.context);
+    var invader1 = new Invader(invaderImages[0]);
+    invader1.x = 100; invader1.y = 192; invader1.draw(this.context);
+    var invader2 = new Invader(invaderImages[1]); invader2.incrementState();
+    invader2.x = 100; invader2.y = 224; invader2.draw(this.context);
+    var invader3 = new Invader(invaderImages[3]);
+    invader3.x = 100; invader3.y = 254; invader3.draw(this.context);
+};
 
-Game.prototype.drawInterface = function() {
+Game.prototype.drawEnd = function() {
+    this.context.textBaseline = 'middle';
+    this.context.textAlign = 'center';
+    this.context.font = '20px "Space-Invaders"';
+    this.context.fillStyle = '#ff0000';
+    this.context.fillText("game over", 160, 70);
+};
+
+Game.prototype.drawInterface = function(hideLife) {
     // Drawing setup
     this.context.textBaseline = 'top';
     this.context.textAlign = 'left';
@@ -415,19 +452,22 @@ Game.prototype.drawInterface = function() {
 
     // Bottom of UI
     this.context.fillText("credit    00", 248, 306);
-    // lifes left
-    this.context.fillText(this.player.lives, 4, 306);
-    for (var i = 0; i < this.player.lives - 1; i++)
-        this.context.drawImage(
-            this.player.image,
-            20 + (i * 26), 306,
-            game.player.width, game.player.height
-        );
-    // green line
-    this.context.beginPath();
-    this.context.moveTo(0, 304);
-    this.context.lineTo(320, 304);
-    this.context.stroke();
+    if (!hideLife) {
+        // lifes left
+        this.context.fillText(this.player.lives, 4, 306);
+        for (var i = 0; i < this.player.lives - 1; i++)
+            this.context.drawImage(
+                this.player.image,
+                20 + (i * 26), 306,
+                game.player.width, game.player.height
+            );
+
+            // green line
+        this.context.beginPath();
+        this.context.moveTo(0, 304);
+        this.context.lineTo(320, 304);
+        this.context.stroke();
+    }
 };
 
 Game.prototype.drawInvaders = function() {
@@ -518,7 +558,7 @@ Game.prototype.checkCollisions = function() {
             this.explodeStart = performance.now();
 
             if (this.player.lives < 1) {
-                // TODO: game over
+                this.showEnd = true;
             }
 
             this.invadersLasers.splice(i--, 1);

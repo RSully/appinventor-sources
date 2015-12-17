@@ -11,7 +11,7 @@
 
 var canvas = document.getElementById("canvas");
 var context = canvas.getContext("2d");
-//canvasFixDPI(canvas, context);
+canvasFixDPI(canvas, context);
 
 /**
  * Each invaderImages[n] represents a row
@@ -93,7 +93,11 @@ document.addEventListener('keyup', function(event){
         game.setMoveRight(false);
     } else if (event.keyCode === 32) {
         spaceReleased = true;
-    }
+    } else if (event.keyCode === 13) {
+        game.showStart = false;
+        game.showEnd = false;
+        game.start();
+     }
 });
 
-game.start();
+game.showStart = true;
