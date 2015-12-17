@@ -58,13 +58,22 @@ function Game(
      * speed will be handled separately
      */
     this.invadersDirection = 1;
-
     /**
      * How long inbetween each invader movement
      * Value in miliseconds
      */
     this.invadersDelay = 600;
     this.invadersSpeed = {x: 150/1000, y: 150/1000};
+
+    this.explodeStart = 0;
+    this.explodeLength = 260;
+
+    this.barriers = [];
+    for (var x = 0; x < Game.BARRIER_COLS; x++) {
+      var barrierSettings = Object.create(barrierImage);
+      barrierSettings.x = 38+x*70;
+      this.barriers[x] = new Barrier(barrierSettings);
+    }
 
     var playerSettings = Object.create(playerImage);
     playerSettings.x = 154;
@@ -74,6 +83,8 @@ function Game(
 
     this.fireDelay = 500;
     this.lastFire = 0;
+
+    this.lastHunterFire = performance.now()+3000;
 
     this.invadersLasers = [];
     this.playersLasers = [];
@@ -88,6 +99,7 @@ function Game(
 
 Game.INVADER_COLS = 10;
 Game.INVADER_ROWS = 5;
+Game.BARRIER_COLS = 4;
 Game.HIGHSCORE_KEY = 'game_highscore';
 
 
@@ -123,6 +135,19 @@ Game.prototype.getBottomMostAliveInvaders = function() {
     return invaders;
 };
 
+Game.prototype.getClosestInvaders = function() {
+  return this.getBottomMostAliveInvaders().filter(function(invader) {
+    return rectIntersectsRect(game.player, {
+      x: invader.x,
+      y:260,
+      width:invader.width,
+      height:invader.height
+    });
+  }).filter(function(invader) {
+    return Math.abs(invader.x-game.player.x) < 10
+  });
+};
+
 /**
  * Helper functions to easily get first (top left) and last (bottom right)
  * invader objects optimally (i.e. without `getInvaders()`)
@@ -154,23 +179,56 @@ Game.prototype.tick = function(timeDelta, timeCurrent) {
 
     this.drawInterface();
 
+    this.invadersDelay = game.getAliveInvaders().length*12;
+
+    if (timeCurrent >= this.explodeStart + this.explodeLength) {
+      this.getAliveInvaders().forEach(function(invader) {
+        if (invader.die) invader.alive = false;
+      });
+      if (this.mysteryInvader && this.mysteryInvader.die)
+        this.mysteryInvader = null;
+      if (this.player.die === 0) {
+        this.explodeStart = timeCurrent;
+        this.player.die = 1;
+      }
+      if (this.player.die === 1) setTimeout((function() {
+        this.lastHunterFire = performance.now()+3000;
+        setTimeout((function() {
+          game.invadersDelay /= 100;
+        }).bind(this),1000);
+        delete this.player.die;
+        this.player.lives -= 1;
+        this.player.x = 154;
+        this.player.y = 266;
+      }).bind(this),300);
+
+    }
+
     if (timeCurrent >= this.lastInvaderUpdate + this.invadersDelay) {
         this.updateInvaders(timeDelta);
         this.lastInvaderUpdate = timeCurrent;
-
-        // TODO: change randomness here
-        // Currently this could return 0,1 so we have 50% chance:
-        if (Math.floor(Math.random() * 2) === 1) {
-            var shootingInvader = this.getBottomMostAliveInvaders().getRandom();
-            if (shootingInvader) {
-                this.invadersLasers.push(new Laser({
-                    image: this.laserImage.image,
-                    width: this.laserImage.width,
-                    height: this.laserImage.height,
-                    x: rectMidX(shootingInvader),
-                    y: rectBottom(shootingInvader)
-                }));
-            }
+        var shootingInvader1 = this.getBottomMostAliveInvaders().getRandom();
+        if (Math.round(Math.random() * 1) === 1) shootingInvader1 = [];
+        var shootingInvader2 = this.getClosestInvaders()[0];
+        if (shootingInvader1 && this.flip) {
+            this.flip = false;
+            this.invadersLasers.push(new Laser({
+                image: this.laserImage.image,
+                width: this.laserImage.width,
+                height: this.laserImage.height,
+                x: rectMidX(shootingInvader1),
+                y: rectBottom(shootingInvader1)
+            }));
+        }
+        else if (timeCurrent > this.lastHunterFire && shootingInvader2) {
+            this.flip = true;
+            this.invadersLasers.push(new Laser({
+                image: this.laserImage.image,
+                width: this.laserImage.width,
+                height: this.laserImage.height,
+                x: rectMidX(shootingInvader2),
+                y: rectBottom(shootingInvader2)
+            }));
         }
 
         /**
@@ -211,6 +269,7 @@ Game.prototype.tick = function(timeDelta, timeCurrent) {
 
     this.player.draw(this.context);
     this.drawInvaders();
+    this.drawBarriers();
     if (this.mysteryInvader) {
         this.mysteryInvader.draw(this.context);
     }
@@ -221,7 +280,7 @@ Game.prototype.tick = function(timeDelta, timeCurrent) {
 Game.prototype.updatePlayer = function(timeDelta) {
     var speed = 60/1000;
     var direction = this.player.getMovementMultipler();
-
+    if (this.player.die != undefined) return;
     if (direction < 0 && this.player.x <= this.padding.x) {
         speed = 0;
     } else if (direction > 0 && this.player.x + this.player.width >= 320 - this.padding.x) {
@@ -287,7 +346,7 @@ Game.prototype.updateLasers = function(timeDelta) {
     for (var i = 0; i < this.playersLasers.length; ++i) {
         var laser = this.playersLasers[i];
 
-        laser.y -= offset;
+        laser.y -= offset*2;
 
         // When offscreen remove:
         if (laser.y + laser.height <= 40) {
@@ -359,6 +418,14 @@ Game.prototype.drawLasers = function() {
     }.bind(this));
 };
 
+Game.prototype.drawBarriers = function() {
+    this.barriers.forEach(function(barrier) {
+        barrier.draw(this.context);
+        barrier.blobs.forEach(function(blob) {
+            blob.draw(this.context);
+        }.bind(this));
+    }.bind(this));
+};
 
 Game.prototype.fireLaser = function() {
     var timeCurrent = performance.now();
@@ -401,7 +468,8 @@ Game.prototype.checkCollisions = function() {
     invaders.forEach(function(invader) {
         for (var i = 0; i < this.playersLasers.length; ++i) {
             if (rectIntersectsRect(this.playersLasers[i], invader)) {
-                invader.alive = false;
+                invader.die = true;
+                this.explodeStart = performance.now();
                 this.setScore(this.player.score + invader.points);
 
                 this.playersLasers.splice(i--, 1);
@@ -418,9 +486,10 @@ Game.prototype.checkCollisions = function() {
 
     for (var i = 0; i < this.invadersLasers.length; ++i) {
         if (rectIntersectsRect(this.invadersLasers[i], this.player)) {
-            this.player.lives -= 1;
-            // TODO: reset the game?
-
+            this.invadersLasers = [];
+            this.invadersDelay *= 100;
+            this.player.die = 0;
+            this.explodeStart = performance.now();
             if (this.player.lives < 1) {
                 // TODO: game over
             }
@@ -428,6 +497,10 @@ Game.prototype.checkCollisions = function() {
             this.invadersLasers.splice(i--, 1);
         }
     }
-
+    for (var j = 0; j < this.barriers.length; ++j) {
+      (checkBarrier.bind(this))(this.playersLasers,j,3);
+      if (this.barriers[j].blobs.length > 100) continue;
+      (checkBarrier.bind(this))(this.invadersLasers,j,3);
+    }
     // TODO: check this.invadersLasers against barriers (not implemented yet)
 };

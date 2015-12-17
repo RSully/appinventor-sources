@@ -13,6 +13,11 @@ Player.prototype = Object.create(ImageView.prototype);
 Player.prototype.constructor = Player;
 
 
+Player.prototype.getImage = function() {
+    if (this.die != undefined) return playerDeath[this.die];
+    return this.image;
+};
+
 /**
  * If both (or neither) keys are pressed, return 0
  * otherwise return -1 for left and 1 for right

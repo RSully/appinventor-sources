@@ -24,5 +24,6 @@ Invader.prototype.incrementState = function() {
 };
 
 Invader.prototype.getImage = function() {
+    if (this.die) return explosionImage;
     return this.images[this.state];
 };
