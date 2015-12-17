@@ -7,7 +7,7 @@ AppInventor.sendEval('(((WebViewer1:getView):getParent):removeView (WebViewer1:g
 AppInventor.sendEval('((as com.google.appinventor.components.runtime.ComponentContainer\
    (lookup-in-current-form-environment \'Screen1)):$add\
     (as com.google.appinventor.components.runtime.AndroidViewComponent WebViewer1))');
-AppInventor.sendEval('(WebViewer1:Height '+AppInventor.getEval('(WebViewer1:Width)')+')')
+AppInventor.sendEval('(WebViewer1:Height 400)')
 
 AppInventor.sendEval('(((WebViewer1:getView):getClass):setWebContentsDebuggingEnabled #t)');
 AppInventor.sendEval('(((WebViewer1:getView):clearCache #t)');

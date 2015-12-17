@@ -1,4 +1,4 @@
-canvas {
+#canvas {
     width: 320px;
     height: 320px;
     background-color: black;
@@ -6,11 +6,18 @@ canvas {
     margin: 0;
 }
 
+#controls {
+    background-image: url('../img/controls.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
 img { display: none; }
 
 body {
   margin: 0;
   zoom: 1.5;
+  background: black;
 }
 
 @font-face {

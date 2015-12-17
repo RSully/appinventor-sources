@@ -8,10 +8,11 @@
 //     console.log('got custom click event trigger for button1: ' + this.name);
 //     alert('test');
 // });
-
+var controls = document.getElementById("controls");
 var canvas = document.getElementById("canvas");
 var context = canvas.getContext("2d");
 canvasFixDPI(canvas, context);
+canvasFixDPI(controls, controls.getContext('2d'));
 
 /**
  * Each invaderImages[n] represents a row
@@ -86,25 +87,26 @@ var game = new Game(
 
 var spaceReleased = true;
 
-document.addEventListener('keydown', function(event){
-    if (event.keyCode === 37) {
+document.addEventListener('touchstart', function(e){
+    if (e.target.getAttribute('id') == 'left') {
         game.setMoveLeft(true);
-    } else if (event.keyCode === 39) {
+    } else if (e.target.getAttribute('id') == 'right') {
         game.setMoveRight(true);
-    } else if (event.keyCode === 32 && spaceReleased) {
+    } else if (e.target.getAttribute('id') == 'start') {
         spaceReleased = false;
         game.fireLaser();
     }
 });
 
-document.addEventListener('keyup', function(event){
-    if (event.keyCode === 37) {
+document.addEventListener('touchend', function(e){
+    console.log(e.target.getAttribute('id'));
+    if (e.target.getAttribute('id') == 'left') {
         game.setMoveLeft(false);
-    } else if (event.keyCode === 39) {
+    } else if (e.target.getAttribute('id') == 'right') {
         game.setMoveRight(false);
-    } else if (event.keyCode === 32) {
+    } else if (e.target.getAttribute('id') == 'fire') {
         spaceReleased = true;
-    } else if (event.keyCode === 13) {
+    } else if (e.target.getAttribute('id') == 'start') {
         game.showStart = false;
         game.showEnd = false;
         game.reset();
