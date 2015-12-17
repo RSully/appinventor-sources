@@ -474,14 +474,15 @@ Game.prototype.drawInterface = function(hideLife) {
     if (!hideLife) {
         // lifes left
         this.context.fillText(this.player.lives, 4, 306);
-        for (var i = 0; i < this.player.lives - 1; i++)
+        for (var i = 0; i < this.player.lives - 1; i++) {
             this.context.drawImage(
                 this.player.image,
                 20 + (i * 26), 306,
                 game.player.width, game.player.height
             );
+        }
 
-            // green line
+        // green line
         this.context.beginPath();
         this.context.moveTo(0, 304);
         this.context.lineTo(320, 304);

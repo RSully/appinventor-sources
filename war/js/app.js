@@ -96,6 +96,7 @@ document.addEventListener('keyup', function(event){
     } else if (event.keyCode === 13) {
         game.showStart = false;
         game.showEnd = false;
+        game.reset();
         game.start();
      }
 });
