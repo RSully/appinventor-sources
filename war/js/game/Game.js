@@ -187,34 +187,33 @@ Game.prototype.tick = function(timeDelta, timeCurrent) {
 
     if (timeCurrent >= this.explodeStart + this.explodeLength) {
         this.getAliveInvaders().forEach(function(invader) {
-            if (invader.die) {
-                invader.alive = false;
-            }
+            if (invader.die) invader.alive = false;
         });
 
         if (this.mysteryInvader && this.mysteryInvader.die) {
             this.mysteryInvader = null;
         }
 
-        if (!this.player.die) {
+        if (this.player.die === 0) {
             this.explodeStart = timeCurrent;
-            this.player.die = true;
+            this.player.die = 1;
         }
 
-        if (this.player.die) {
-            setTimeout((function() {
-                setTimeout((function() {
-                    this.invadersDelay /= 100;
-                }).bind(this), 1000);
+        if (this.player.die === 1) {
+            this.paused = true;
 
+            setTimeout((function() {
+                this.paused = true;
                 this.player.lives -= 1;
 
                 // Reset position/etc for next screen
                 this.player.die = false;
-                this.lastHunterFire = performance.now() + 3000;
+                this.lastHunterFire = performance.now() + 1500;
                 this.player.x = 154;
                 this.player.y = 266;
-            }).bind(this), 300);
+
+                this.paused = false;
+            }).bind(this), 1000);
         }
     }
 
@@ -294,7 +293,7 @@ Game.prototype.tick = function(timeDelta, timeCurrent) {
 
 
 Game.prototype.updatePlayer = function(timeDelta) {
-    if (this.player.die) {
+    if (this.player.die !== false) {
         return;
     }
 
@@ -413,7 +412,7 @@ Game.prototype.drawInterface = function() {
     this.context.fillText(this.player.lives, 4, 306);
     for (var i = 0; i < this.player.lives - 1; i++)
         this.context.drawImage(
-            this.player.getImage(),
+            this.player.image,
             20 + (i * 26), 306,
             game.player.width, game.player.height
         );
@@ -507,9 +506,10 @@ Game.prototype.checkCollisions = function() {
     for (var i = 0; i < this.invadersLasers.length; ++i) {
         if (rectIntersectsRect(this.invadersLasers[i], this.player)) {
             this.invadersLasers = [];
-            this.invadersDelay *= 100;
-            this.player.die = false;
+
+            this.player.die = 0;
             this.explodeStart = performance.now();
+
             if (this.player.lives < 1) {
                 // TODO: game over
             }

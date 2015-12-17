@@ -15,7 +15,13 @@ Player.prototype.constructor = Player;
 
 
 Player.prototype.getImage = function() {
-    // if (this.die != undefined) return playerDeath[this.die];
+    /**
+     * If we're dying, grab the image for that
+     * Two frames [0], [1]
+     */
+    if (this.die !== false) {
+        return playerDeath[this.die];
+    }
     return this.image;
 };
 
