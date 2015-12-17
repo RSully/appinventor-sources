@@ -15,7 +15,7 @@ Player.prototype.constructor = Player;
 
 
 Player.prototype.getImage = function() {
-    if (this.die != undefined) return playerDeath[this.die];
+    // if (this.die != undefined) return playerDeath[this.die];
     return this.image;
 };
 

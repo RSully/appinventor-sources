@@ -97,6 +97,10 @@ function Game(
     this.timer.start();
 }
 
+Game.prototype.reset = function() {
+
+};
+
 Game.INVADER_COLS = 10;
 Game.INVADER_ROWS = 5;
 Game.BARRIER_COLS = 4;
@@ -179,23 +183,25 @@ Game.prototype.tick = function(timeDelta, timeCurrent) {
 
     this.drawInterface();
 
-    this.invadersDelay = game.getAliveInvaders().length * 12;
+    // this.invadersDelay = game.getAliveInvaders().length * 12;
 
     if (timeCurrent >= this.explodeStart + this.explodeLength) {
         this.getAliveInvaders().forEach(function(invader) {
-            if (invader.die) invader.alive = false;
+            if (invader.die) {
+                invader.alive = false;
+            }
         });
 
         if (this.mysteryInvader && this.mysteryInvader.die) {
             this.mysteryInvader = null;
         }
 
-        if (this.player.die === 0) {
+        if (!this.player.die) {
             this.explodeStart = timeCurrent;
-            this.player.die = 1;
+            this.player.die = true;
         }
 
-        if (this.player.die === 1) {
+        if (this.player.die) {
             setTimeout((function() {
                 setTimeout((function() {
                     this.invadersDelay /= 100;
@@ -288,7 +294,7 @@ Game.prototype.tick = function(timeDelta, timeCurrent) {
 
 
 Game.prototype.updatePlayer = function(timeDelta) {
-    if (this.player.die != undefined) {
+    if (this.player.die) {
         return;
     }
 
@@ -502,7 +508,7 @@ Game.prototype.checkCollisions = function() {
         if (rectIntersectsRect(this.invadersLasers[i], this.player)) {
             this.invadersLasers = [];
             this.invadersDelay *= 100;
-            this.player.die = 0;
+            this.player.die = false;
             this.explodeStart = performance.now();
             if (this.player.lives < 1) {
                 // TODO: game over
