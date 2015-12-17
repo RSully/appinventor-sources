@@ -10,7 +10,7 @@ function Barrier(settings) {
 Barrier.prototype = Object.create(ImageView.prototype);
 Barrier.prototype.constructor = Barrier;
 
-var checkBarrier = function(groupLasers,j,tolerance) {
+Barrier.check = function(groupLasers,j,tolerance) {
   for (var i = 0; i < groupLasers.length; ++i) {
     var laser = groupLasers[i];
     if (rectIntersectsRect(laser, this.barriers[j])) {

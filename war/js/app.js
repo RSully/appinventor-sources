@@ -92,7 +92,7 @@ document.addEventListener('touchstart', function(e){
         game.setMoveLeft(true);
     } else if (e.target.getAttribute('id') == 'right') {
         game.setMoveRight(true);
-    } else if (e.target.getAttribute('id') == 'start') {
+    } else if (e.target.getAttribute('id') == 'fire') {
         spaceReleased = false;
         game.fireLaser();
     }
