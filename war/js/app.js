@@ -80,10 +80,11 @@ ourStorage.setItem(Game.HIGHSCORE_KEY, Math.floor(Math.random() * 40)*10 + 300);
 
 var game = new Game(
     canvas, context,
-    ourStorage,
+    typeof window.localStorage === "undefined" ? ourStorage : window.localStorage,
     invaderImages, mysteryInvaderImage, playerImage, laserImage
 );
 
+var touchReleased = true;
 var spaceReleased = true;
 
 document.addEventListener('keydown', function(event){
