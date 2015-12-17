@@ -11,7 +11,7 @@
 
 var canvas = document.getElementById("canvas");
 var context = canvas.getContext("2d");
-canvasFixDPI(canvas, context);
+// canvasFixDPI(canvas, context);
 
 /**
  * Each invaderImages[n] represents a row

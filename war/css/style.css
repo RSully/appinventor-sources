@@ -10,7 +10,7 @@ img { display: none; }
 
 body {
   margin: 0;
-  zoom: 1.5;
+  /*zoom: 1.5;*/
 }
 
 @font-face {
