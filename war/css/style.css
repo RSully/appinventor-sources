@@ -15,9 +15,10 @@
 img { display: none; }
 
 body {
-  margin: 0;
-  zoom: 1.5;
-  background: black;
+    margin: 0;
+    background: black;
+    margin: 0;
+    /*zoom: 1.5;*/
 }
 
 @font-face {
