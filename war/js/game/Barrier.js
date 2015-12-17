@@ -26,8 +26,9 @@ Barrier.check = function(groupLasers, j, tolerance) {
                 blobSettings.x = Math.floor(laser.x-6);
                 blobSettings.y = Math.floor(laser.y);
                 blobSettings.x += (blobSettings.x%4);
-                if (blobSettings.y < 228)
-                blobSettings.y += (playerCheck?-1:1)*2;
+                if (blobSettings.y < 228) {
+                    blobSettings.y += (playerCheck?-1:1)*2;
+                }
                 this.barriers[j].blobs.push(new Blob(blobSettings));
                 groupLasers.splice(i--, 1);
             } else if (amt == tolerance) {
@@ -36,7 +37,7 @@ Barrier.check = function(groupLasers, j, tolerance) {
                 blobSettings.x = Math.floor(laser.x-6);
                 blobSettings.y = Math.floor(laser.y)//-playerCheck?4:0;
                 blobSettings.size = playerCheck?6:8;
-                if (amt > 10) console.log(amt);
+                // if (amt > 10) console.log(amt);
                 this.barriers[j].blobs.push(new Blob(blobSettings));
                 groupLasers.splice(i--, 1);
                 //if (playerCheck) groupLasers.splice(i--, 1);
