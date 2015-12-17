@@ -1,6 +1,7 @@
 function Invader(settings) {
     ImageView.call(this, settings);
 
+    this.die = false;
     this.alive = settings.alive || true;
     this.points = settings.points || 0;
 

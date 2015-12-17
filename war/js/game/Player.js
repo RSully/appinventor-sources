@@ -1,6 +1,7 @@
 function Player(settings) {
     ImageView.call(this, settings);
 
+    this.die = false;
     this.lives = settings.lives || 3;
     this.score = settings.score || 0;
     /**
