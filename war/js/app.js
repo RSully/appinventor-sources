@@ -67,9 +67,20 @@ var pBlobImage = {
 var explosionImage = document.getElementById('explosion');
 var playerDeath = [document.getElementById('death0'), document.getElementById('death1')];
 
+var ourStorage = {
+    data: {},
+    setItem: function(k, v) {
+        this.data[k] = v;
+    },
+    getItem: function(k) {
+        return this.data[k];
+    }
+};
+ourStorage.setItem(Game.HIGHSCORE_KEY, Math.floor(Math.random() * 40)*10 + 300);
+
 var game = new Game(
     canvas, context,
-    window.localStorage,
+    ourStorage,
     invaderImages, mysteryInvaderImage, playerImage, laserImage
 );
 
