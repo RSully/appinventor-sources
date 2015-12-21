@@ -11,8 +11,8 @@
 var controls = document.getElementById("controls");
 var canvas = document.getElementById("canvas");
 var context = canvas.getContext("2d");
-canvasFixDPI(canvas, context);
-canvasFixDPI(controls, controls.getContext('2d'));
+// canvasFixDPI(canvas, context);
+// canvasFixDPI(controls, controls.getContext('2d'));
 
 /**
  * Each invaderImages[n] represents a row
@@ -85,8 +85,35 @@ var game = new Game(
     invaderImages, mysteryInvaderImage, playerImage, laserImage
 );
 
+
 var touchReleased = true;
 var spaceReleased = true;
+
+document.addEventListener('keydown', function(event){
+    if (event.keyCode === 37) {
+        game.setMoveLeft(true);
+    } else if (event.keyCode === 39) {
+        game.setMoveRight(true);
+    } else if (event.keyCode === 32 && spaceReleased) {
+        spaceReleased = false;
+        game.fireLaser();
+    }
+});
+
+document.addEventListener('keyup', function(event){
+    if (event.keyCode === 37) {
+        game.setMoveLeft(false);
+    } else if (event.keyCode === 39) {
+        game.setMoveRight(false);
+    } else if (event.keyCode === 32) {
+        spaceReleased = true;
+    } else if (event.keyCode === 13) {
+        game.showStart = false;
+        game.showEnd = false;
+        game.reset();
+        game.start();
+     }
+});
 
 document.addEventListener('touchstart', function(e){
     if (e.target.getAttribute('id') == 'left') {
