@@ -1,25 +1,4 @@
-#canvas {
-    width: 320px;
-    height: 320px;
-    background-color: black;
-    float: left;
-    margin: 0;
-}
 
-#controls {
-    background-image: url('../img/controls.png');
-    background-size: cover;
-    background-repeat: no-repeat;
-}
-
-img { display: none; }
-
-body {
-    margin: 0;
-    background: black;
-    margin: 0;
-    /*zoom: 1.5;*/
-}
 
 @font-face {
     font-family: 'Space-Invaders';
@@ -28,4 +7,43 @@ body {
     font-style: normal;
     font-stretch: normal;
     unicode-range: U+000D-20AC;
+}
+
+
+body {
+    background: black;
+}
+
+html, body {
+    width: 320px;
+}
+
+html, body, canvas, div, img {
+    margin: 0;
+    padding: 0;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    overflow: hidden;
+}
+
+img { display: none; }
+
+canvas {
+    margin: 0 auto;
+}
+
+#canvas {
+    width: 320px;
+    height: 320px;
+    background-color: black;
+}
+
+#controls {
+    background-image: url('../img/controls.png');
+    background-size: cover;
+    background-repeat: no-repeat;
 }
