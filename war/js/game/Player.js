@@ -1,6 +1,9 @@
 function Player(settings) {
     ImageView.call(this, settings);
 
+    /**
+     * This can either be false, or 0/1 for a frame from playerDeath
+     */
     this.die = false;
     this.lives = settings.lives || 3;
     this.score = settings.score || 0;
