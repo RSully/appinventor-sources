@@ -1,12 +1,3 @@
-/**
- * Allow creation of objects using an array
- */
-Function.prototype.construct = function(aArgs) {
-    var oNew = Object.create(this.prototype);
-    this.apply(oNew, aArgs);
-    return oNew;
-};
-
 
 AppInventor.uiEval = (function(val, callback) {
     AppInventor.sendEval(val);
@@ -30,6 +21,6 @@ function AppInventorEvalAsync(scheme) {
 }
 
 
-window.alert = (function(s) {
+window.ai_toast = (function(s) {
     AppInventorEval('((android.widget.Toast:makeText Screen1 "'+s+'" 0):show)');
 });
