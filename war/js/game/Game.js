@@ -452,17 +452,17 @@ Game.prototype.drawEnd = function() {
 Game.prototype.drawInterface = function(hideLife) {
 
     //sorry!
-    var c = document.getElementById('controls').getContext('2d');
-    c.clearRect(0, 0, 320, 142);
-    c.drawImage(button, 72, 25, 40,40);
-    c.drawImage(button, 108, 25, 40,40);
-    c.drawImage(button, 245, 64, 40,40);
-    c.textBaseline = 'middle';
-    c.textAlign = 'center';
-    c.font = '20px "Space-Invaders"';
-    c.fillStyle = '#ff0000';
-    c.fillText("start", 110, 114);
-
+    var controls = document.getElementById("controls");
+    var controlsCtx = controls.getContext('2d');
+    controlsCtx.clearRect(0, 0, 320, 142);
+    controlsCtx.drawImage(button, 72, 25, 40,40);
+    controlsCtx.drawImage(button, 108, 25, 40,40);
+    controlsCtx.drawImage(button, 245, 64, 40,40);
+    controlsCtx.textBaseline = 'middle';
+    controlsCtx.textAlign = 'center';
+    controlsCtx.font = '20px "Space-Invaders"';
+    controlsCtx.fillStyle = '#ff0000';
+    controlsCtx.fillText("start", 110, 114);
 
     // Drawing setup
     this.context.textBaseline = 'top';
