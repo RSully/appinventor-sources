@@ -8,7 +8,8 @@
 //     console.log('got custom click event trigger for button1: ' + this.name);
 //     alert('test');
 // });
-var controls = document.getElementById("controls");
+
+
 var canvas = document.getElementById("canvas");
 var context = canvas.getContext("2d");
 // canvasFixDPI(canvas, context);
@@ -67,6 +68,7 @@ var pBlobImage = {
 
 var explosionImage = document.getElementById('explosion');
 var playerDeath = [document.getElementById('death0'), document.getElementById('death1')];
+var button = document.getElementById('button');
 
 var ourStorage = {
     data: {},
@@ -81,65 +83,79 @@ ourStorage.setItem(Game.HIGHSCORE_KEY, Math.floor(Math.random() * 40)*10 + 300);
 
 var game = new Game(
     canvas, context,
-    typeof window.localStorage === "undefined" ? ourStorage : window.localStorage,
+    (typeof window.localStorage === "undefined" || window.localStorage === null) ? ourStorage : window.localStorage,
     invaderImages, mysteryInvaderImage, playerImage, laserImage
 );
 
 
-var touchReleased = true;
-var spaceReleased = true;
+var fireReleased = true;
+
+function downEvent(action) {
+    if (action === 'left') {
+        game.setMoveLeft(true);
+    } else if (action === 'right') {
+        game.setMoveRight(true);
+    } else if (action === 'fire' && fireReleased) {
+        fireReleased = false;
+        game.fireLaser();
+    } else if (action === 'start') {
+        // nothing, do it on release
+    }
+}
+
+function releaseEvent(action) {
+    if (action === 'left') {
+        game.setMoveLeft(false);
+    } else if (action === 'right') {
+        game.setMoveRight(false);
+    } else if (action === 'fire') {
+        fireReleased = true;
+    } else if (action === 'start') {
+        game.showStart = false;
+        game.showEnd = false;
+        game.reset();
+        game.start();
+    }
+}
 
 document.addEventListener('keydown', function(event){
     if (event.keyCode === 37) {
-        game.setMoveLeft(true);
+        downEvent('left');
     } else if (event.keyCode === 39) {
-        game.setMoveRight(true);
-    } else if (event.keyCode === 32 && spaceReleased) {
-        spaceReleased = false;
-        game.fireLaser();
+        downEvent('right');
+    } else if (event.keyCode === 32) {
+        downEvent('fire');
+    } else if (event.keyCode === 13) {
+        downEvent('start');
     }
 });
 
 document.addEventListener('keyup', function(event){
     if (event.keyCode === 37) {
-        game.setMoveLeft(false);
+        releaseEvent('left');
     } else if (event.keyCode === 39) {
-        game.setMoveRight(false);
+        releaseEvent('right');
     } else if (event.keyCode === 32) {
-        spaceReleased = true;
+        releaseEvent('fire');
     } else if (event.keyCode === 13) {
-        game.showStart = false;
-        game.showEnd = false;
-        game.reset();
-        game.start();
-     }
-});
-
-document.addEventListener('touchstart', function(e){
-    if (e.target.getAttribute('id') == 'left') {
-        game.setMoveLeft(true);
-    } else if (e.target.getAttribute('id') == 'right') {
-        game.setMoveRight(true);
-    } else if (e.target.getAttribute('id') == 'fire') {
-        spaceReleased = false;
-        game.fireLaser();
+        releaseEvent('start');
     }
 });
 
-document.addEventListener('touchend', function(e){
-    console.log(e.target.getAttribute('id'));
-    if (e.target.getAttribute('id') == 'left') {
-        game.setMoveLeft(false);
-    } else if (e.target.getAttribute('id') == 'right') {
-        game.setMoveRight(false);
-    } else if (e.target.getAttribute('id') == 'fire') {
-        spaceReleased = true;
-    } else if (e.target.getAttribute('id') == 'start') {
-        game.showStart = false;
-        game.showEnd = false;
-        game.reset();
-        game.start();
-     }
+document.addEventListener('mousedown', function(e) {
+    downEvent(e.target.getAttribute('id'));
+});
+
+document.addEventListener('mouseup', function(e) {
+    releaseEvent(e.target.getAttribute('id'));
+});
+
+document.addEventListener('touchstart', function(e) {
+    downEvent(e.target.getAttribute('id'));
+});
+
+document.addEventListener('touchend', function(e) {
+    releaseEvent(e.target.getAttribute('id'));
 });
 
 game.showStart = true;
